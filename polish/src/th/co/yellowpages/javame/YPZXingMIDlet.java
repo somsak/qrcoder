@@ -16,7 +16,9 @@ import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
+//#ifdef polish.api.mmapi
 import javax.microedition.media.control.VideoControl;
+//#endif
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
@@ -50,8 +52,10 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 	public static final int COMMAND_SAVE = 0;
 
 	private Display display;
+//#ifdef polish.api.mmapi
 	private Player player;
 	private VideoControl videoControl;
+//#endif
 	private Canvas canvas;
 	private Alert confirmation;
 	private Alert alert;
@@ -71,6 +75,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 //#endif
 	}
 
+//#ifdef polish.api.mmapi
 	private static Player createPlayer() throws IOException, MediaException {
 		// Try a workaround for Nokias, which want to use capture://image in
 		// some cases
@@ -104,6 +109,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 		}
 		return player;
 	}
+//#endif
 
 	void barcodeAction(ParsedResult result, Displayable backDisplayable) {
 		display.setCurrent(new YPQRCodeDetectHandlerForm(result, this,
@@ -111,6 +117,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 	}
 
 	protected void destroyApp(boolean unconditional) {
+//#ifdef polish.api.mmapi
 		if (player != null) {
 			videoControl = null;
 			try {
@@ -122,6 +129,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 			player.close();
 			player = null;
 		}
+//#endif
 	}
 
 	Canvas getCanvas() {
@@ -132,6 +140,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 		return display;
 	}
 
+//#ifdef polish.api.mmapi
 	Player getPlayer() {
 		return player;
 	}
@@ -139,6 +148,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 	VideoControl getVideoControl() {
 		return videoControl;
 	}
+//#endif
 
 	void handleDecodedText(Result theResult, Displayable backDisplayable) {
 		ParsedResult result = ResultParser.parseResult(theResult);
@@ -170,6 +180,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 	}
 
 	protected void pauseApp() {
+//#ifdef polish.api.mmapi
 		if (player != null) {
 			try {
 				player.stop();
@@ -178,6 +189,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 				showError(me);
 			}
 		}
+//#endif
 	}
 
 	private void showAlert(Alert alert) {
@@ -224,6 +236,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 		display.setCurrent(new YPSetting(this));
 	}
 
+//#ifdef polish.api.mmapi
 	void showVideoCanvas() {
 		try {
 			player = createPlayer();
@@ -248,6 +261,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 			e.printStackTrace();
 		}
 	}
+//#endif
 
 	protected void startApp() throws MIDletStateChangeException {
 		System.out.println("Platform: " + PLATFORM);

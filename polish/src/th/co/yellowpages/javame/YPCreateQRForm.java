@@ -5,7 +5,9 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import javax.microedition.io.Connector;
+//#ifdef polish.api.fileconnectionapi
 import javax.microedition.io.file.FileConnection;
+//#endif
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Choice;
 import javax.microedition.lcdui.ChoiceGroup;
@@ -33,7 +35,9 @@ final class YPCreateQRForm extends Form implements CommandListener {
 
 	private static final Command CMD_CREATE = new Command("Create",
 			Command.ITEM, 0);
+//#ifdef polish.api.fileconnectionapi
 	private static final Command CMD_SAVE = new Command("Save", Command.ITEM, 1);
+//#endif
 	private static final Command CMD_NEW = new Command("New", Command.ITEM, 2);
 	private static final Command CMD_BACK = new Command("Back", Command.BACK, 0);
 
@@ -75,13 +79,17 @@ final class YPCreateQRForm extends Form implements CommandListener {
 				deleteAll();
 				append(imageItem);
 				removeCommand(CMD_CREATE);
+//#ifdef polish.api.fileconnectionapi
 				addCommand(CMD_SAVE);
+//#endif
 				addCommand(CMD_NEW);
 			} else {
 
 			}
+//#ifdef polish.api.fileconnectionapi
 		} else if (command == CMD_SAVE) {
 			saveQRCodeImage();
+//#endif
 		} else if (command == CMD_NEW) {
 			ypZXingMIDlet.getDisplay().setCurrent(
 					new YPCreateQRForm(ypZXingMIDlet));
@@ -134,6 +142,7 @@ final class YPCreateQRForm extends Form implements CommandListener {
 		append(ecnodeRadioButtons);
 	}
 
+//#ifdef polish.api.fileconnectionapi
 	private void saveQRCodeImage() {
 		byte[] pngData = PNGEncoder.toPNG(qrCodeImage, false);
 
@@ -142,6 +151,7 @@ final class YPCreateQRForm extends Form implements CommandListener {
 		Thread t = new Thread(new SaveThread(pngData, filename, this));
 		t.start();
 	}
+//#endif
 
 	void showAlert(String message) {
 		Alert alert = new Alert("Result");
@@ -150,6 +160,7 @@ final class YPCreateQRForm extends Form implements CommandListener {
 		ypZXingMIDlet.getDisplay().setCurrent(alert);
 	}
 
+//#ifdef polish.api.fileconnectionapi
 	private class SaveThread implements Runnable {
 
 		private byte[] data;
@@ -191,4 +202,5 @@ final class YPCreateQRForm extends Form implements CommandListener {
 			}
 		}
 	}
+//#endif
 }

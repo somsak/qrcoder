@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import javax.microedition.io.Connector;
+//#ifdef polish.api.fileconnectionapi
 import javax.microedition.io.file.FileConnection;
+//#endif
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
@@ -24,13 +26,16 @@ public class YPAlbumForm extends Form implements CommandListener {
 		this.ypZXingMIDlet = ypZXingMIDlet;
 		chooseImageForm = this;
 
+//#ifdef polish.api.fileconnectionapi
 		Thread t = new Thread(new LoadImageThread());
 		t.start();
+//#endif
 
 		addCommand(CMD_BACK);
 		setCommandListener(this);
 	}
 
+//#ifdef polish.api.fileconnectionapi
 	private class LoadImageThread implements Runnable {
 
 		public void run() {
@@ -55,6 +60,7 @@ public class YPAlbumForm extends Form implements CommandListener {
 			}
 		}
 	}
+//#endif
 
 	public void commandAction(Command command, Displayable d) {
 		int type = command.getCommandType();

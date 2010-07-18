@@ -1,3 +1,4 @@
+//#condition polish.api.fileconnectionapi
 package th.co.yellowpages.javame;
 
 import java.io.IOException;

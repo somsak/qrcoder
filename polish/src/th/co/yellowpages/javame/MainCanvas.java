@@ -72,9 +72,11 @@ class MainCanvas extends Canvas {
 			currentAction++;
 		} else if (key == -5) {
 			switch (currentAction) {
+//#ifdef polish.api.mmapi
 			case ACTION_SCAN:
 				ypZXingMIDlet.showVideoCanvas();
 				break;
+//#endif
 			case ACTION_CREATE:
 				ypZXingMIDlet.showCreateQRCanvas();
 				break;
@@ -113,8 +115,10 @@ class MainCanvas extends Canvas {
 				| Graphics.HCENTER);
 
 		// Menu
+//#ifdef polish.api.mmapi
 		g.drawImage(scanIconPaint, canvasWidth / 2 - 70, canvasHeigth
 				- bottomMargin, Graphics.BOTTOM | Graphics.HCENTER);
+//#endif
 		g.drawImage(createQRIconPaint, canvasWidth / 2, canvasHeigth
 				- bottomMargin, Graphics.BOTTOM | Graphics.HCENTER);
 		g.drawImage(historyIconPaint, canvasWidth / 2 + 70, canvasHeigth
@@ -138,9 +142,11 @@ class MainCanvas extends Canvas {
 		chooseIconPaint = chooseIcon;
 
 		switch (this.currentAction) {
+//#ifdef polish.api.mmapi
 		case MainCanvas.ACTION_SCAN:
 			scanIconPaint = scanIconSelected;
 			break;
+//#endif
 		case MainCanvas.ACTION_CREATE:
 			createQRIconPaint = createQRIconSelected;
 			break;

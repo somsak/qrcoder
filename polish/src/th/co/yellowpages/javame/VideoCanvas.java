@@ -1,3 +1,4 @@
+//#condition polish.api.mmapi
 package th.co.yellowpages.javame;
 
 /*

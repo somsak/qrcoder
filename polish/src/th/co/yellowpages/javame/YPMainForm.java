@@ -38,6 +38,7 @@ public class YPMainForm extends Form implements CommandListener {
 					.createImage("/res/logo.png"), ImageItem.LAYOUT_CENTER
 					| ImageItem.LAYOUT_VCENTER, null);
 
+//#ifdef polish.api.mmapi
 			ImageItem camera = new ImageItem(null, Image
 					.createImage("/res/camera-icon.png"),
 					ImageItem.LAYOUT_CENTER | ImageItem.LAYOUT_VCENTER
@@ -50,7 +51,9 @@ public class YPMainForm extends Form implements CommandListener {
 						ypZXingMIDlet.showVideoCanvas();
 				}
 			});
+//#endif
 
+//#ifdef polish.api.fileconnectionapi
 			ImageItem album = new ImageItem(null, Image
 					.createImage("/res/album-icon.png"),
 					ImageItem.LAYOUT_CENTER | ImageItem.LAYOUT_VCENTER, null);
@@ -62,11 +65,16 @@ public class YPMainForm extends Form implements CommandListener {
 						ypZXingMIDlet.showChooseImageForm();
 				}
 			});
+//#endif
 
 			append(logo);
+//#ifdef polish.api.mmapi
 			append("ScanCode");
 			append(camera);
+//#endif
+//#ifdef polish.api.fileconnectionapi
 			append(album);
+//#endif
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,10 +90,14 @@ public class YPMainForm extends Form implements CommandListener {
 	public void commandAction(Command command, Displayable displayable) {
 		if (command == CMD_EXIT) {
 			ypZXingMIDlet.stop();
+//#ifdef polish.api.mmapi
 		} else if (command == CMD_CAMERA) {
 			ypZXingMIDlet.showVideoCanvas();
+//#endif
+//#ifdef polish.api.fileconnectionapi
 		} else if (command == CMD_ALBUM) {
 			ypZXingMIDlet.showChooseImageForm();
+//#endif
 		} else if (command == CMD_HISTORY) {
 			ypZXingMIDlet.showGenerateHistoryForm();
 		} else if (command == CMD_ENCODER) {

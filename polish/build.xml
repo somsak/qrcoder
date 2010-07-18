@@ -18,16 +18,20 @@
   <property name="device.run" value="Generic_midp20_cldc11"/>
   <property name="svn.url" value="https://qrcoder.googlecode.com/svn/d"/>
 
+  <!--
   <property name="cldc5_lib" value="${midp_home}/import/cldc-1.1-java5.0.jar"/>
   <property name="polish5_lib" value="${midp_home}/import/enough-j2mepolish-client-java5.jar"/>
   <property name="cldc_lib" value="${midp_home}/lib/cldcapi11.jar"/>
   <property name="midp_lib" value="${midp_home}/lib/midpapi20.jar"/>
   <property name="mmapi_lib" value="${midp_home}/lib/mmapi.jar"/>
   <property name="classpath" value="${preprocessor}:${midp_lib}:${cldc_lib}:${mmapi_lib}:${cldc5_lib}:${polish5_lib}"/>
+  -->
 
   <property name="wtk.home" value="${midp_home}"/>
+  <!--
   <property name="wtk.cldc.version" value="1.1"/>
   <property name="wtk.midp.version" value="2.0"/>
+  -->
   <property name="polish.home" location="${polish}"/>
 
   <property name="top" value="."/>
@@ -103,6 +107,9 @@
         <or>
           <requirement name="Identifier" value="Nokia/N73" />
           <requirement name="Identifier" value="Generic/midp20_cldc11" />
+          <!--
+          <requirement name="Identifier" value="Palm/Treo755p" />
+          -->
           <!--
           <requirement name="Identifier" value="Nokia/N-Gage" />
           -->
@@ -204,7 +211,9 @@
           <requirement name="Identifier" value="WellcoM/W3319" />
         </or>
         <or>
+          <!--
           <requirement name="JavaConfiguration" value="CLDC/1.0" />
+          -->
           <requirement name="JavaConfiguration" value="CLDC/1.1+" />
         </or>
         <or>
@@ -227,6 +236,11 @@
           <!--compilerarg value="-Xlint:unchecked" /-->
         </compiler>
         <postcompiler name="java5" />
+        <!--
+        <postcompiler name="floater">
+          <parameter name="verbose" value="true" />
+        </postcompiler>
+        -->
         <midlet class="th.co.yellowpages.javame.YPZXingMIDlet" name="QRCoder" />
         <obfuscator unless="debug" name="ProGuard" />
         <variables includeAntProperties="true">
