@@ -13553,7 +13553,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.0</identifier>
     <features>isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.0" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13564,7 +13567,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.1</identifier>
     <features>isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.1" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13575,7 +13581,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.2</identifier>
     <features>isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.2" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13586,7 +13595,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.2TrackBall</identifier>
     <features>hasTrackballEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.2" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13597,7 +13609,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.3</identifier>
     <features>hasTrackballEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.3" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13608,7 +13623,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.5</identifier>
     <features>hasTrackballEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.5" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13619,7 +13637,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.6</identifier>
     <features>hasTrackballEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13630,7 +13651,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/4.7</identifier>
     <features>hasTrackballEvents, hasPointerEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.7" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13640,7 +13664,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/5.0</identifier>
     <features>hasTrackballEvents, hasPointerEvents, isVirtual</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/5.0" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13652,7 +13679,10 @@ These namespaces/schemas will be used soon.
     <identifier>BlackBerry/9500, BlackBerry/Storm</identifier>
     <features>hasTrackballEvents, hasPointerEvents</features>
     <capability name="ScreenSize" value="480x360" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.7" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13663,7 +13693,10 @@ These namespaces/schemas will be used soon.
     <identifier>BlackBerry/9000, BlackBerry/Bold</identifier>
     <features>hasTrackballEvents</features>
     <capability name="ScreenSize" value="480x320" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13674,7 +13707,10 @@ These namespaces/schemas will be used soon.
     <identifier>BlackBerry/8900</identifier>
     <features>hasTrackballEvents</features>
     <capability name="ScreenSize" value="480x360" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13684,7 +13720,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/8130</identifier>
     <features>hasTrackballEvents</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.3" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13696,7 +13735,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/8120</identifier>
     <features>hasTrackballEvents</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.3" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13708,7 +13750,10 @@ These namespaces/schemas will be used soon.
   <device>
     <identifier>BlackBerry/8310</identifier>
     <features>hasTrackballEvents</features>
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.5" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="pimapi, btapi, wmapi2.0, fileconnection, locationapi, mmapi1.1, wmapi1.1" />
     <capability name="alphalevels" value="16" />
@@ -13762,7 +13807,10 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="320x240" />
     <capability name="FullCanvasSize" value="320x240" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.1" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13786,7 +13834,10 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="320x240" />
     <capability name="FullCanvasSize" value="320x240" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.2" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13801,7 +13852,10 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="320x240" />
     <capability name="FullCanvasSize" value="320x240" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.2" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13815,7 +13869,10 @@ These namespaces/schemas will be used soon.
     <capability name="FullCanvasSize" value="320x240" />
     <capability name="CanvasSize" value="320x240" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.5" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13831,7 +13888,10 @@ These namespaces/schemas will be used soon.
     <capability name="FullCanvasSize" value="320x240" />
     <capability name="CanvasSize" value="320x240" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.5" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13847,7 +13907,10 @@ These namespaces/schemas will be used soon.
     <capability name="FullCanvasSize" value="240x260" />
     <capability name="BitsPerPixel" value="16" />
     <capability name="HeapSize" value="dynamic" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.2" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13862,7 +13925,10 @@ These namespaces/schemas will be used soon.
     <identifier>BlackBerry/5810</identifier>
     <capability name="ScreenSize" value="160x160" />
     <capability name="BitsPerPixel" value="1" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/1.0, BlackBerry" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.0" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
     <capability name="wap.userAgent" value="BlackBerry5810" />
@@ -13873,7 +13939,10 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="240x160" />
     <capability name="FullCanvasSize" value="240x160" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.1" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
     <capability name="wap.userAgent" value="BlackBerry7290" />
@@ -13888,7 +13957,10 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="240x260" />
     <capability name="FullCanvasSize" value="240x260" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.1" />
+    -->
     <capability name="JavaPackage" value="wmapi" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="Bugs" value="ItemStateListenerCalledTooEarly" />
@@ -13900,7 +13972,10 @@ These namespaces/schemas will be used soon.
     <capability name="FullCanvasSize" value="240x260" />
     <capability name="CanvasSize" value="240x260" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.1" />
+    -->
     <capability name="JavaPackage" value="wmapi" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="Bugs" value="ItemStateListenerCalledTooEarly" />
@@ -13911,7 +13986,10 @@ These namespaces/schemas will be used soon.
     <capability name="ScreenSize" value="240x160" />
     <capability name="FullCanvasSize" value="240x160" />
     <capability name="BitsPerPixel" value="16" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
+    <!--
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.1" />
+    -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="locationapi, wmapi" />
     <capability name="SoundFormat" value="vnf" />

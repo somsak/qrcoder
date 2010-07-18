@@ -212,11 +212,13 @@
           <requirement name="Identifier" value="WellcoM/W3319" />
         </or>
         -->
+        <!--
         <not> 
           <or>
             <requirement name="Vendor" value="BlackBerry" />
           </or>
         </not> 
+        -->
         <or>
           <!--
           <requirement name="JavaConfiguration" value="CLDC/1.0" />
