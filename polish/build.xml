@@ -116,6 +116,7 @@
         </or>
       </deviceRequirements>
       <deviceRequirements unless="debug">
+        <!--
         <or>
           <requirement name="Identifier" value="Dopod/818_Pro" />
           <requirement name="Identifier" value="Generic/midp10_cldc10" />
@@ -210,6 +211,12 @@
           <requirement name="Identifier" value="Sony-Ericsson/W960" />
           <requirement name="Identifier" value="WellcoM/W3319" />
         </or>
+        -->
+        <not> 
+          <or>
+            <requirement name="Vendor" value="BlackBerry" />
+          </or>
+        </not> 
         <or>
           <!--
           <requirement name="JavaConfiguration" value="CLDC/1.0" />
