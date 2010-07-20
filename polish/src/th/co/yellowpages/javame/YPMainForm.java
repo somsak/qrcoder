@@ -35,12 +35,12 @@ public class YPMainForm extends Form implements CommandListener {
 
 		try {
 			ImageItem logo = new ImageItem(null, Image
-					.createImage("/res/logo.png"), ImageItem.LAYOUT_CENTER
+					.createImage("/logo.png"), ImageItem.LAYOUT_CENTER
 					| ImageItem.LAYOUT_VCENTER, null);
 
 //#ifdef polish.api.mmapi
 			ImageItem camera = new ImageItem(null, Image
-					.createImage("/res/camera-icon.png"),
+					.createImage("/camera-icon.png"),
 					ImageItem.LAYOUT_CENTER | ImageItem.LAYOUT_VCENTER
 							| ImageItem.LAYOUT_NEWLINE_BEFORE, null);
 
@@ -55,7 +55,7 @@ public class YPMainForm extends Form implements CommandListener {
 
 //#ifdef polish.api.fileconnectionapi
 			ImageItem album = new ImageItem(null, Image
-					.createImage("/res/album-icon.png"),
+					.createImage("/album-icon.png"),
 					ImageItem.LAYOUT_CENTER | ImageItem.LAYOUT_VCENTER, null);
 
 			album.setDefaultCommand(CMD_ALBUM);

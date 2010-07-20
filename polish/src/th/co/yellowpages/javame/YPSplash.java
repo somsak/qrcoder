@@ -9,8 +9,8 @@ import javax.microedition.lcdui.Image;
 public class YPSplash extends Canvas implements Runnable {
 
 	private static final int BG_COLOR = 0x007DD7;
-	private static final String LOGO = "/res/logo.png";
-	private static final String FOOTER = "/res/footer.png";
+	private static final String LOGO = "/logo.png";
+	private static final String FOOTER = "/footer.png";
 
 	private YPZXingMIDlet ypZXingMIDlet;
 

@@ -390,13 +390,13 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 			System.out.println("SoundId = " + soundId);
 
 			if (soundId == 0) {
-				is = getClass().getResourceAsStream("/res/1.wav");
+				is = getClass().getResourceAsStream("/1.wav");
 			} else if (soundId == 1) {
-				is = getClass().getResourceAsStream("/res/2.wav");
+				is = getClass().getResourceAsStream("/2.wav");
 			} else if (soundId == 2) {
-				is = getClass().getResourceAsStream("/res/3.wav");
+				is = getClass().getResourceAsStream("/3.wav");
 			} else if (soundId == 3) {
-				is = getClass().getResourceAsStream("/res/4.wav");
+				is = getClass().getResourceAsStream("/4.wav");
 			} else {
 				return;
 			}

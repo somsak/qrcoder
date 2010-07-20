@@ -41,19 +41,19 @@ class MainCanvas extends Canvas {
 		display = yPZXingMIDlet.getDisplay();
 
 		try {
-			ypLogo = Image.createImage("/res/zxing-icon.png");
+			ypLogo = Image.createImage("/zxing-icon.png");
 
-			scanIcon = Image.createImage("/res/zxing-icon.png");
-			scanIconSelected = Image.createImage("/res/face-smile.png");
+			scanIcon = Image.createImage("/zxing-icon.png");
+			scanIconSelected = Image.createImage("/face-smile.png");
 
-			createQRIcon = Image.createImage("/res/zxing-icon.png");
-			createQRIconSelected = Image.createImage("/res/face-smile.png");
+			createQRIcon = Image.createImage("/zxing-icon.png");
+			createQRIconSelected = Image.createImage("/face-smile.png");
 
-			historyIcon = Image.createImage("/res/zxing-icon.png");
-			historyIconSelected = Image.createImage("/res/face-smile.png");
+			historyIcon = Image.createImage("/zxing-icon.png");
+			historyIconSelected = Image.createImage("/face-smile.png");
 
-			chooseIcon = Image.createImage("/res/zxing-icon.png");
-			chooseIconSelected = Image.createImage("/res/face-smile.png");
+			chooseIcon = Image.createImage("/zxing-icon.png");
+			chooseIconSelected = Image.createImage("/face-smile.png");
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to load Image: " + e);
 		}

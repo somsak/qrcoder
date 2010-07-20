@@ -13642,7 +13642,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
     -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
+    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
     <capability name="Emulator.Skin" value="9000" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
@@ -13656,7 +13656,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.7" />
     -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
+    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
     <capability name="Emulator.Skin" value="9500" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
@@ -13669,7 +13669,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/5.0" />
     -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
+    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
     <capability name="Emulator.Skin" value="9500" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
@@ -13684,7 +13684,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.7" />
     -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
+    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
     <capability name="Emulator.Skin" value="9500" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
@@ -13698,7 +13698,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
     -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
+    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
     <capability name="Emulator.Skin" value="9000" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />
@@ -13712,7 +13712,7 @@ These namespaces/schemas will be used soon.
     <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
     -->
     <capability name="JavaConfiguration" value="CLDC/1.1" />
-    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location" />
+    <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
     <capability name="Emulator.Skin" value="8900" />
     <capability name="Bugs" value="ReservedKeywordSerializable" />

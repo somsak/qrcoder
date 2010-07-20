@@ -62,7 +62,7 @@ public class YPQRCodeDetectHandlerForm extends Form implements CommandListener {
 		this.ypZXingMIDlet.playBeeb(ypSetting.loadSoundSetting());
 	}
 
-	protected void paint(Graphics g) {
+	public void paint(Graphics g) {
 		g.setColor(0xFFFF00);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(0x000000);
