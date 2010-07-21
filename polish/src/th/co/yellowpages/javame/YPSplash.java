@@ -8,6 +8,7 @@ import javax.microedition.lcdui.Image;
 
 public class YPSplash extends Canvas implements Runnable {
 
+	private static final int SPLASH_TIME = 3000;
 	private static final int BG_COLOR = 0x007DD7;
 	private static final String LOGO = "/logo.png";
 	private static final String FOOTER = "/footer.png";
@@ -41,5 +42,10 @@ public class YPSplash extends Canvas implements Runnable {
 
 	public void run() {
 		ypZXingMIDlet.getDisplay().setCurrent(this);
+		try {
+			Thread.sleep(SPLASH_TIME);
+		} catch (InterruptedException e) {
+		}
+		ypZXingMIDlet.showMainForm();
 	}
 }

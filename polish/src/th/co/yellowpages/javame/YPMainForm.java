@@ -8,35 +8,60 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.ImageItem;
+//#if polish.Vendor == BlackBerry
+import javax.microedition.lcdui.Choice;
+import javax.microedition.lcdui.List;
+//#endif
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemCommandListener;
 
+//#if polish.Vendor == BlackBerry
+//# public class YPMainForm extends List implements CommandListener {
+//#else
 public class YPMainForm extends Form implements CommandListener {
+//#endif
 
 	private final YPZXingMIDlet ypZXingMIDlet;
 
 	private static final Command CMD_CAMERA = new Command("Camera",
+			Command.OK, 0);
+	private static final Command CMD_ALBUM = new Command("Album",
+			Command.OK, 0);
+	private static final Command CMD_GO = new Command("GO",
 			Command.ITEM, 0);
-	private static final Command CMD_ALBUM = new Command("Album", Command.ITEM,
-			1);
 	private static final Command CMD_ENCODER = new Command("Encoder",
-			Command.ITEM, 2);
+			Command.SCREEN, 2);
 	private static final Command CMD_HISTORY = new Command("History",
-			Command.ITEM, 3);
+			Command.SCREEN, 3);
 	private static final Command CMD_SETTING = new Command("Settings",
-			Command.ITEM, 4);
+			Command.SCREEN, 4);
 
-	private static final Command CMD_EXIT = new Command("Exit", Command.EXIT, 0);
+	private static final Command CMD_EXIT = new Command("Exit",
+			Command.EXIT, 0);
 
 	public YPMainForm(final YPZXingMIDlet ypZXingMIDlet) {
+//#if polish.Vendor == BlackBerry
+		super("QRCoder", Choice.IMPLICIT);
+//#else
 		super("QRCoder");
+//#endif
 
 		this.ypZXingMIDlet = ypZXingMIDlet;
 
+//#if polish.Vendor == BlackBerry
+//#ifdef polish.api.mmapi
+		append("Camera", null);
+//#endif
+//#ifdef polish.api.fileconnectionapi
+		append("Album", null);
+//#endif
+//#else
 		try {
 			ImageItem logo = new ImageItem(null, Image
 					.createImage("/logo.png"), ImageItem.LAYOUT_CENTER
 					| ImageItem.LAYOUT_VCENTER, null);
+
+			append(logo);
 
 //#ifdef polish.api.mmapi
 			ImageItem camera = new ImageItem(null, Image
@@ -51,6 +76,9 @@ public class YPMainForm extends Form implements CommandListener {
 						ypZXingMIDlet.showVideoCanvas();
 				}
 			});
+
+			append("ScanCode");
+			append(camera);
 //#endif
 
 //#ifdef polish.api.fileconnectionapi
@@ -65,19 +93,18 @@ public class YPMainForm extends Form implements CommandListener {
 						ypZXingMIDlet.showChooseImageForm();
 				}
 			});
-//#endif
 
-			append(logo);
-//#ifdef polish.api.mmapi
-			append("ScanCode");
-			append(camera);
-//#endif
-//#ifdef polish.api.fileconnectionapi
 			append(album);
 //#endif
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//#endif
+
+//#if polish.Vendor == BlackBerry
+		setSelectCommand(CMD_GO);
+//#endif
 
 		addCommand(CMD_ENCODER);
 		addCommand(CMD_HISTORY);
@@ -97,6 +124,19 @@ public class YPMainForm extends Form implements CommandListener {
 //#ifdef polish.api.fileconnectionapi
 		} else if (command == CMD_ALBUM) {
 			ypZXingMIDlet.showChooseImageForm();
+//#endif
+//#if polish.Vendor == BlackBerry
+		} else if (command == CMD_GO) {
+			int index = getSelectedIndex();
+			if (index == 0) {
+//#ifdef polish.api.mmapi
+				ypZXingMIDlet.showVideoCanvas();
+//#endif
+			} else if (index == 1) {
+//#ifdef polish.api.fileconnectionapi
+				ypZXingMIDlet.showChooseImageForm();
+//#endif
+			}
 //#endif
 		} else if (command == CMD_HISTORY) {
 			ypZXingMIDlet.showGenerateHistoryForm();

@@ -54,7 +54,11 @@ final class VideoCanvas extends Canvas implements CommandListener {
 	}
 
 	protected void keyPressed(int keyCode) {
+//#if polish.Vendor == BlackBerry
+		if (keyCode == -8 || keyCode == -19 || keyCode == -21) {
+//#else
 		if (keyCode == -5) {
+//#endif
 			snapshotThread.continueRun();
 		}
 	}
@@ -62,7 +66,9 @@ final class VideoCanvas extends Canvas implements CommandListener {
 	public void commandAction(Command command, Displayable displayable) {
 		int type = command.getCommandType();
 
-		if (type == Command.BACK) {
+		if (type == Command.OK) {
+			snapshotThread.continueRun();
+		} else if (type == Command.BACK) {
 			snapshotThread.stop();
 			ypZXingMIDlet.showMainForm();
 		}

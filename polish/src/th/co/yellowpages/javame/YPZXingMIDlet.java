@@ -277,8 +277,6 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 			e.printStackTrace();
 		}
 
-		display.setCurrent(new YPMainForm(this));
-
 		resultHistory = new Vector(5);
 		history = new Menu(this, "Scan History", "Use");
 
