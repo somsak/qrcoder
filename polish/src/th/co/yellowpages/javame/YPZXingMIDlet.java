@@ -99,7 +99,7 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 		}
 		if (player == null) {
 			try {
-				player = Manager.createPlayer("capture://video");
+				player = Manager.createPlayer("capture://image?encoding=jpeg");
 			} catch (NullPointerException npe) {
 				// The Nokia 2630 throws this if image/video capture is not
 				// supported
@@ -219,13 +219,6 @@ public final class YPZXingMIDlet extends MIDlet implements PlayerListener {
 		} else {
 			showError(t.toString());
 		}
-	}
-
-	void showHistoryCanvas() {
-	}
-
-	void showMainCanvas() {
-		display.setCurrent(new MainCanvas(this));
 	}
 
 	void showMainForm() {

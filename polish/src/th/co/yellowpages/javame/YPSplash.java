@@ -16,7 +16,12 @@ public class YPSplash extends Canvas implements Runnable {
 	private YPZXingMIDlet ypZXingMIDlet;
 
 	public YPSplash(YPZXingMIDlet ypZXingMIDlet) {
+		try {
 		this.ypZXingMIDlet = ypZXingMIDlet;
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPSplash.");
+			System.out.println(e.toString());
+		}
 	}
 
 	protected void paint(Graphics g) {

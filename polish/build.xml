@@ -17,7 +17,10 @@
   <property name="device.emulator" value="DefaultColorPhone"/>
   <property name="device.run" value="Generic_midp20_cldc11"/>
   <property name="svn.url" value="https://qrcoder.googlecode.com/svn/d"/>
-
+  <property name="blackberry.certificate.dir" location="${blackberry.home}/certificates"/>
+  <property name="blackberry.sigtool.dir" location="${blackberry.home}/sigtool"/>
+  <property name="blackberry.certificate.password" value="secret"/>
+  
   <!--
   <property name="cldc5_lib" value="${midp_home}/import/cldc-1.1-java5.0.jar"/>
   <property name="polish5_lib" value="${midp_home}/import/enough-j2mepolish-client-java5.jar"/>
@@ -42,8 +45,10 @@
   <property name="dist" value="dist"/>
   <property name="deploy" value="deploy"/>
 
+  <!--
   <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${ant-contrib}"/>
   <taskdef resource="antenna.properties" classpath="${antenna}"/>
+  -->
   <taskdef classname="de.enough.polish.ant.PolishTask" classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar" name="j2mepolish"/>
 
   <target name="clean">
@@ -105,6 +110,7 @@
             jarUrl="${jar.url}${project.prefix}-${polish.vendor}_${polish.name}.jar" />
       <deviceRequirements if="debug">
         <or>
+          <requirement name="Identifier" value="BlackBerry/8900" />
           <requirement name="Identifier" value="BlackBerry/9700" />
           <requirement name="Identifier" value="Generic/midp20_cldc11" />
           <!--
@@ -252,8 +258,10 @@
         </postcompiler>
         -->
         <midlet class="th.co.yellowpages.javame.YPZXingMIDlet" name="QRCoder" />
-        <obfuscator unless="debug" name="ProGuard" />
+        <obfuscator unless="debug || polish.blackberry" name="ProGuard" />
         <variables includeAntProperties="true">
+          <variable name="polish.usePolishGui" value="true"
+                    if="polish.blackberry" />
           <variable name="polish.FullScreen" value="false"
                     if="polish.name == N-Gage" />
           <variable name="project.HyperlinkList" value="true" />

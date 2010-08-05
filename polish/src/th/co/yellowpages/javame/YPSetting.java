@@ -27,6 +27,8 @@ public class YPSetting extends Form implements CommandListener,
 	public YPSetting(final YPZXingMIDlet ypZXingMIDlet) {
 		super("Setting");
 
+		try {
+
 		this.ypZXingMIDlet = ypZXingMIDlet;
 
 		try {
@@ -59,6 +61,10 @@ public class YPSetting extends Form implements CommandListener,
 
 		setCommandListener(this);
 		setItemStateListener(this);
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPSetting.");
+			System.out.println(e.toString());
+		}
 	}
 
 	private void saveSoundSetting(String soundId) {

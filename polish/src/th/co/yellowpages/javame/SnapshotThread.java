@@ -37,17 +37,22 @@ import javax.microedition.media.control.VideoControl;
  */
 final class SnapshotThread implements Runnable {
 
-	private final YPZXingMIDlet ypZXingMIDlet;
-	private final Object waitLock;
+	private YPZXingMIDlet ypZXingMIDlet;
+	private Object waitLock;
 	private volatile boolean done;
-	private final MultimediaManager multimediaManager;
+	private MultimediaManager multimediaManager;
 	private String bestEncoding;
 
 	SnapshotThread(YPZXingMIDlet yPZXingMIDlet) {
+	try {
 		this.ypZXingMIDlet = yPZXingMIDlet;
 		waitLock = new Object();
 		done = false;
 		multimediaManager = YPZXingMIDlet.buildMultimediaManager();
+	} catch(Exception e) {
+		System.out.println("Try catch block from SnapshotThread.");
+		System.out.println(e.toString());
+	}
 	}
 
 	void continueRun() {

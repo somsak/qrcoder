@@ -13693,10 +13693,10 @@ These namespaces/schemas will be used soon.
     <identifier>BlackBerry/9700</identifier>
     <features>hasTrackballEvents</features>
     <capability name="ScreenSize" value="480x320" />
-    <capability name="JavaPlatform" value="MIDP/2.0" />
     <!--
-    <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/5.0" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
     -->
+    <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/5.0" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />
@@ -13721,10 +13721,10 @@ These namespaces/schemas will be used soon.
     <identifier>BlackBerry/8900</identifier>
     <features>hasTrackballEvents</features>
     <capability name="ScreenSize" value="480x360" />
-    <capability name="JavaPlatform" value="MIDP/2.0" />
     <!--
-    <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
+    <capability name="JavaPlatform" value="MIDP/2.0" />
     -->
+    <capability name="JavaPlatform" value="MIDP/2.0, BlackBerry/4.6" />
     <capability name="JavaConfiguration" value="CLDC/1.1" />
     <capability name="JavaPackage" value="wmapi, mmapi, pimapi,javacard,contenthandler,location,fileconnectionapi" />
     <capability name="SoundFormat" value="amr, nb-amr" />

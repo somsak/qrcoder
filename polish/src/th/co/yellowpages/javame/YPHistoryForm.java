@@ -35,6 +35,8 @@ public class YPHistoryForm extends Form implements CommandListener {
 
 	public YPHistoryForm(YPZXingMIDlet ypZXingMIDlet) {
 		super("History");
+		try {
+
 
 		this.ypZXingMIDlet = ypZXingMIDlet;
 		this.generateHistoryForm = this;
@@ -45,6 +47,10 @@ public class YPHistoryForm extends Form implements CommandListener {
 
 		Thread t = new Thread(new RecordListThread());
 		t.start();
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPHistoryForm.");
+			System.out.println(e.toString());
+		}
 	}
 
 	public void commandAction(Command command, Displayable displayable) {

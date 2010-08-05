@@ -21,7 +21,7 @@ import javax.microedition.lcdui.ItemCommandListener;
 public class YPMainForm extends Form implements CommandListener {
 //#endif
 
-	private final YPZXingMIDlet ypZXingMIDlet;
+	private YPZXingMIDlet ypZXingMIDlet;
 
 	private static final Command CMD_CAMERA = new Command("Camera",
 			Command.OK, 0);
@@ -45,12 +45,16 @@ public class YPMainForm extends Form implements CommandListener {
 //#else
 		super("QRCoder");
 //#endif
-
 		this.ypZXingMIDlet = ypZXingMIDlet;
 
 //#if polish.Vendor == BlackBerry
 //#ifdef polish.api.mmapi
+	try {
 		append("Camera", null);
+	} catch(Exception e) {
+		System.out.println("Try catch block from YPMainForm.");
+		System.out.println(e.toString());
+	}
 //#endif
 //#ifdef polish.api.fileconnectionapi
 		append("Album", null);

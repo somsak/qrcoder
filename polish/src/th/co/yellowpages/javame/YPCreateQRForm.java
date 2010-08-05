@@ -42,7 +42,11 @@ final class YPCreateQRForm extends Form implements CommandListener {
 	private static final Command CMD_BACK = new Command("Back", Command.BACK, 0);
 
 	private YPZXingMIDlet ypZXingMIDlet;
+//#if polish.JavaPlatform == "BlackBerry/5.0"
+	private javax.microedition.lcdui.TextField textField;
+//#else
 	private TextField textField;
+//#endif
 
 	private Image qrCodeImage;
 
@@ -54,6 +58,8 @@ final class YPCreateQRForm extends Form implements CommandListener {
 
 	public YPCreateQRForm(YPZXingMIDlet ypZXingMIDlet) {
 		super("Encoder");
+		try {
+
 
 		this.ypZXingMIDlet = ypZXingMIDlet;
 
@@ -62,6 +68,10 @@ final class YPCreateQRForm extends Form implements CommandListener {
 		setCommandListener(this);
 
 		initForm();
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPCreateQRForm.");
+			System.out.println(e.toString());
+		}
 	}
 
 	public void commandAction(Command command, Displayable displayable) {
@@ -128,7 +138,11 @@ final class YPCreateQRForm extends Form implements CommandListener {
 	}
 
 	private void initForm() {
+//#if polish.JavaPlatform == "BlackBerry/5.0"
+		textField = new javax.microedition.lcdui.TextField("Message: ", null, 256, javax.microedition.lcdui.TextField.ANY);
+//#else
 		textField = new TextField("Message: ", null, 256, TextField.ANY);
+//#endif
 		textField.setPreferredSize(getWidth(), 65);
 		append(textField);
 

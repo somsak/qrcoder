@@ -24,11 +24,16 @@ public class YPRecord {
 	}
 
 	public YPRecord(String qrContent, String type) {
+		try {
 		this.qrContent = qrContent;
 		this.type = type;
 
 		Date date = new Date();
 		this.datetime = Long.toString(date.getTime());
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPRecord.");
+			System.out.println(e.toString());
+		}
 	}
 
 	public String getQRContent() {

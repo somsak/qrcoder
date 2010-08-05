@@ -34,6 +34,8 @@ public class YPQRCodeDetectHandlerForm extends Form implements CommandListener {
 	public YPQRCodeDetectHandlerForm(ParsedResult result,
 			YPZXingMIDlet ypZXingMIDlet, Displayable backDisplayable) {
 		super("Decode result");
+		try {
+
 		this.result = result;
 		this.ypZXingMIDlet = ypZXingMIDlet;
 		this.backDisplayable = backDisplayable;
@@ -60,6 +62,10 @@ public class YPQRCodeDetectHandlerForm extends Form implements CommandListener {
 		append(text);
 		YPSetting ypSetting = new YPSetting(ypZXingMIDlet);
 		this.ypZXingMIDlet.playBeeb(ypSetting.loadSoundSetting());
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPQRCodeDetectHandlerForm.");
+			System.out.println(e.toString());
+		}
 	}
 
 	public void paint(Graphics g) {

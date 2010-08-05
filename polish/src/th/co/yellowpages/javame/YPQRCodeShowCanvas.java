@@ -17,12 +17,17 @@ public class YPQRCodeShowCanvas extends Canvas implements CommandListener {
 
 	public YPQRCodeShowCanvas(Image qrCode, YPZXingMIDlet ypZXingMIDlet,
 			YPHistoryForm generateHistoryForm) {
+		try {
 		this.qrCode = qrCode;
 		this.ypzXingMIDlet = ypZXingMIDlet;
 		this.generateHistoryForm = generateHistoryForm;
 
 		addCommand(CMD_BACK);
 		setCommandListener(this);
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPQRCodeShowCanvas.");
+			System.out.println(e.toString());
+		}
 	}
 
 	protected void paint(Graphics g) {

@@ -22,6 +22,8 @@ public class YPAlbumForm extends Form implements CommandListener {
 
 	public YPAlbumForm(YPZXingMIDlet ypZXingMIDlet) {
 		super("Album");
+		try {
+
 
 		this.ypZXingMIDlet = ypZXingMIDlet;
 		chooseImageForm = this;
@@ -33,6 +35,10 @@ public class YPAlbumForm extends Form implements CommandListener {
 
 		addCommand(CMD_BACK);
 		setCommandListener(this);
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPZXingMIDlet.");
+			System.out.println(e.toString());
+		}
 	}
 
 //#ifdef polish.api.fileconnectionapi

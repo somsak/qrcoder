@@ -44,7 +44,9 @@ final class VideoCanvas extends Canvas implements CommandListener {
 		this.ypZXingMIDlet = ypZXingMIDlet;
 		addCommand(back);
 		// addCommand(history);
+		try {
 		setCommandListener(this);
+		} catch(Exception e) {e.toString();}
 		snapshotThread = new SnapshotThread(ypZXingMIDlet);
 		new Thread(snapshotThread).start();
 	}

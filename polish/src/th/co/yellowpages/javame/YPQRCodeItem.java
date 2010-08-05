@@ -30,6 +30,8 @@ public class YPQRCodeItem extends CustomItem implements ItemCommandListener {
 			int height, String filename, YPZXingMIDlet ypZXingMIDlet,
 			YPHistoryForm generateHistoryForm) {
 		super(null);
+		try {
+
 
 		this.qrContent = qrContent;
 		this.qrImage = qrImage;
@@ -42,6 +44,10 @@ public class YPQRCodeItem extends CustomItem implements ItemCommandListener {
 		setDefaultCommand(CMD_SELECT);
 		addCommand(CMD_INFO);
 		this.setItemCommandListener(this);
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPQRCodeItem.");
+			System.out.println(e.toString());
+		}
 	}
 
 	protected int getMinContentHeight() {

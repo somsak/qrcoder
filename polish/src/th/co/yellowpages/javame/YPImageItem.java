@@ -20,6 +20,8 @@ public class YPImageItem extends CustomItem implements ItemCommandListener {
 	protected YPImageItem(Image image, YPZXingMIDlet ypZXingMIDlet,
 			YPAlbumForm chooseImageForm) {
 		super(null);
+		try {
+
 
 		this.image = image;
 		this.ypZXingMIDlet = ypZXingMIDlet;
@@ -27,6 +29,10 @@ public class YPImageItem extends CustomItem implements ItemCommandListener {
 
 		setDefaultCommand(CMD_DECODE);
 		setItemCommandListener(this);
+		} catch(Exception e) {
+			System.out.println("Try catch block from YPImageItem.");
+			System.out.println(e.toString());
+		}
 	}
 
 	protected int getMinContentHeight() {
