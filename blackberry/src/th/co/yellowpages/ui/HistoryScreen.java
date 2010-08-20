@@ -16,17 +16,17 @@
 
 package th.co.yellowpages.ui;
 
+import th.co.yellowpages.ui.component.CustomLabelField;
+import th.co.yellowpages.zxing.Result;
+import th.co.yellowpages.zxing.client.rim.ZXingUiApplication;
 import th.co.yellowpages.zxing.client.rim.persistence.history.DecodeHistory;
 import th.co.yellowpages.zxing.client.rim.persistence.history.DecodeHistoryItem;
 import th.co.yellowpages.zxing.client.rim.util.Log;
 
-import net.rim.blackberry.api.browser.Browser;
-import net.rim.blackberry.api.browser.BrowserSession;
+import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.DrawStyle;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.component.ButtonField;
+import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
@@ -40,51 +40,37 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
  */
 public class HistoryScreen extends MainScreen {
 
+	private ZXingUiApplication app;
+
 	HistoryScreen() {
-		LabelField title = new LabelField("QRCoder - History", DrawStyle.ELLIPSIS
-				| USE_ALL_WIDTH);
+		LabelField title = new LabelField("QRCoder - History",
+				DrawStyle.ELLIPSIS | USE_ALL_WIDTH);
 		title.setMargin(5, 0, 0, 5);
 		setTitle(title);
-		
+
+		app = (ZXingUiApplication) UiApplication.getUiApplication();
+
 		Manager vfm = new VerticalFieldManager(FIELD_HCENTER | VERTICAL_SCROLL);
 		Log.debug("Num history items: "
 				+ DecodeHistory.getInstance().getNumItems());
 		DecodeHistory history = DecodeHistory.getInstance();
-		FieldChangeListener itemListener = new ButtonListener();
 		for (int i = 0; i < history.getNumItems(); i++) {
-			DecodeHistoryItem item = history.getItemAt(i);
-			Field labelButton = new ButtonField(item.getURI(), FIELD_HCENTER
-					| ButtonField.CONSUME_CLICK);
-			labelButton.setChangeListener(itemListener);
+			final DecodeHistoryItem item = history.getItemAt(i);
+
+			CustomLabelField labelButton = new CustomLabelField(item
+					.getContent(), item.getDate(), USE_ALL_WIDTH | FOCUSABLE) {
+				protected boolean navigationClick(int status, int time) {
+					Result result = new Result(item.getContent(), null, null, null);
+					Bitmap bitmap = Bitmap.getBitmapResource("unknown_barcode.png");
+					app.pushScreen(new ResultScreen(result, bitmap));
+					return true;
+				}
+			};
+
 			vfm.add(labelButton);
 		}
 
-		Field okButton = new ButtonField("OK", FIELD_HCENTER
-				| ButtonField.CONSUME_CLICK);
-		okButton.setChangeListener(itemListener);
 		add(vfm);
-	}
-
-	/**
-	 * Closes the screen when the OK button is pressed.
-	 */
-	private static class ButtonListener implements FieldChangeListener {
-		public void fieldChanged(Field field, int context) {
-			if (field instanceof ButtonField) {
-				BrowserSession browserSession = Browser.getDefaultSession();
-				// This cannot be weakened to FieldLabelProvider -- not a public
-				// API
-				browserSession.displayPage(((ButtonField) field).getLabel());
-			}
-		}
-	}
-
-	/**
-	 * Overriding this method removes the save changes prompt
-	 */
-	public boolean onSavePrompt() {
-		setDirty(false);
-		return true;
 	}
 
 }

@@ -7,7 +7,9 @@ import java.util.Hashtable;
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 import javax.microedition.lcdui.Image;
+import javax.microedition.media.Player;
 
+import th.co.yellowpages.ui.component.CustomButtonField;
 import th.co.yellowpages.zxing.BinaryBitmap;
 import th.co.yellowpages.zxing.DecodeHintType;
 import th.co.yellowpages.zxing.LuminanceSource;
@@ -25,7 +27,9 @@ import th.co.yellowpages.zxing.client.rim.util.URLDecoder;
 import th.co.yellowpages.zxing.common.GlobalHistogramBinarizer;
 import net.rim.blackberry.api.browser.Browser;
 import net.rim.blackberry.api.browser.BrowserSession;
+import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Field;
@@ -90,7 +94,7 @@ public class YPMainScreen extends MainScreen {
 
 		reader = new MultiFormatReader();
 		readerHints = new Hashtable(1);
-		readerHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+		// readerHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
 	}
 
 	/**
@@ -108,7 +112,11 @@ public class YPMainScreen extends MainScreen {
 		headerIcon.setBackground(BackgroundFactory
 				.createSolidBackground(BACKGROUND_COLOR));
 
+		FontFamily fontfamily[] = FontFamily.getFontFamilies();
+		Font font = fontfamily[0].getFont(FontFamily.SCALABLE_FONT, 18);
+
 		LabelField ypLabel = new LabelField("YP", FIELD_RIGHT);
+		ypLabel.setFont(font);
 
 		HorizontalFieldManager titleHorizontalField = new HorizontalFieldManager(
 				FIELD_RIGHT);
@@ -171,9 +179,9 @@ public class YPMainScreen extends MainScreen {
 		XYEdges buttonMargin = new XYEdges(10, 10, 5, 10);
 
 		// 2 Encoder Button
-		CustomButton encoderButton = new CustomButton(ENCODER_BUTTON_LABEL,
-				ENCODER_ICON_ONFOCUS, ENCODER_ICON_ONUNFOCUS,
-				ButtonField.CONSUME_CLICK);
+		CustomButtonField encoderButton = new CustomButtonField(
+				ENCODER_BUTTON_LABEL, ENCODER_ICON_ONFOCUS,
+				ENCODER_ICON_ONUNFOCUS, ButtonField.CONSUME_CLICK);
 		encoderButton.setMargin(buttonMargin);
 		LabelField encodeLabel = new LabelField("Encoder", FIELD_HCENTER) {
 			public void paint(Graphics graphics) {
@@ -188,9 +196,9 @@ public class YPMainScreen extends MainScreen {
 		vfm1.add(encodeLabel);
 
 		// 3 History Button
-		CustomButton historyButton = new CustomButton(HISTORY_BUTTON_LABEL,
-				HISTORY_ICON_ONFOCUS, HISTORY_ICON_ONUNFOCUS,
-				ButtonField.CONSUME_CLICK);
+		CustomButtonField historyButton = new CustomButtonField(
+				HISTORY_BUTTON_LABEL, HISTORY_ICON_ONFOCUS,
+				HISTORY_ICON_ONUNFOCUS, ButtonField.CONSUME_CLICK);
 		historyButton.setMargin(buttonMargin);
 		LabelField historyLabel = new LabelField("History", FIELD_HCENTER) {
 			public void paint(Graphics graphics) {
@@ -205,7 +213,7 @@ public class YPMainScreen extends MainScreen {
 		vfm2.add(historyLabel);
 
 		// 4 Help Button
-		CustomButton helpButton = new CustomButton(HELP_BUTTON_LABEL,
+		CustomButtonField helpButton = new CustomButtonField(HELP_BUTTON_LABEL,
 				HELP_ICON_ONFOCUS, HELP_ICON_ONUNFOCUS,
 				ButtonField.CONSUME_CLICK);
 		helpButton.setMargin(buttonMargin);
@@ -222,7 +230,7 @@ public class YPMainScreen extends MainScreen {
 		vfm3.add(helpLabel);
 
 		HorizontalFieldManager hfm1 = new HorizontalFieldManager(FIELD_HCENTER);
-		hfm1.setMargin(20, 0, 0, 0);
+		hfm1.setMargin(20, 0, 10, 0);
 
 		hfm1.add(vfm1);
 		hfm1.add(vfm2);
@@ -314,8 +322,8 @@ public class YPMainScreen extends MainScreen {
 			String buttonName = "";
 			if (field instanceof ButtonField)
 				buttonName = ((ButtonField) field).getLabel();
-			else if (field instanceof CustomButton)
-				buttonName = ((CustomButton) field).getLabel();
+			else if (field instanceof CustomButtonField)
+				buttonName = ((CustomButtonField) field).getLabel();
 			Log.debug("*** fieldChanged: " + field.getIndex());
 
 			if (buttonName.equals(CAMERA_BUTTON_LABEL)) {
@@ -327,7 +335,7 @@ public class YPMainScreen extends MainScreen {
 					Log.error("!!! Problem invoking camera.!!!: " + e);
 				}
 			} else if (buttonName.equals(ALBUM_BUTTON_LABEL)) {
-				// TODO push album screen
+				app.pushScreen(new AlbumScreen());
 			} else if (buttonName.equals(ENCODER_BUTTON_LABEL)) {
 				app.pushScreen(new EncoderScreen());
 			} else if (buttonName.equals(HISTORY_BUTTON_LABEL)) {
@@ -347,6 +355,7 @@ public class YPMainScreen extends MainScreen {
 	private final class FileConnectionThread implements Runnable {
 
 		private final String imagePath;
+		private Bitmap bitmapImage;
 
 		private FileConnectionThread(String imagePath) {
 			this.imagePath = imagePath;
@@ -357,12 +366,15 @@ public class YPMainScreen extends MainScreen {
 			InputStream is = null;
 			Image capturedImage = null;
 			try {
-				file = (FileConnection) Connector.open("file://" + imagePath,
+				file = (FileConnection) Connector.open("file://"+imagePath,
 						Connector.READ_WRITE);
+				
 				is = file.openInputStream();
 				capturedImage = Image.createImage(is);
-			} catch (IOException e) {
+				//is.close();
+			} catch (Exception e) {
 				Log.error("Problem creating image: " + e);
+				System.out.println("Problem creating image: " + e.getMessage());
 				removeProgressBar();
 				invalidate();
 				showMessage("An error occured processing the image.");
@@ -373,7 +385,7 @@ public class YPMainScreen extends MainScreen {
 						is.close();
 					}
 					if (file != null && file.exists()) {
-						file.delete();
+						 file.delete();
 						if (file.isOpen()) {
 							file.close();
 						}
@@ -399,6 +411,7 @@ public class YPMainScreen extends MainScreen {
 					decodingTimer.finished();
 				} catch (ReaderException e) {
 					Log.error("Could not decode image: " + e);
+					System.out.println("Could not decode image: " + e.toString());
 					decodingTimer.finished();
 					removeProgressBar();
 					invalidate();
@@ -428,9 +441,31 @@ public class YPMainScreen extends MainScreen {
 							showMessage("We detected that the decoding process took quite a while. "
 									+ "It will be much faster if you decrease your camera's resolution (640x480).");
 						}
-						DecodeHistory.getInstance().addHistoryItem(
-								new DecodeHistoryItem(resultText));
-						invokeBrowser(resultText);
+
+						boolean isDuplicate = false;
+
+						DecodeHistory history = DecodeHistory.getInstance();
+						for (int i = 0; i < history.getNumItems(); i++) {
+							DecodeHistoryItem item = history.getItemAt(i);
+							if (item.getContent().equals(resultText)) {
+								isDuplicate = true;
+								break;
+							}
+						}
+
+						if (isDuplicate == false) {
+							DecodeHistory.getInstance().addHistoryItem(
+									new DecodeHistoryItem(resultText));
+						}
+
+						Integer soundInt = AppSettings.getInstance()
+								.getIntegerItem(AppSettings.SETTING_BEEP_SOUND);
+						if (soundInt == null)
+							soundInt = new Integer(0);
+						playBeeb(soundInt.intValue());
+						bitmapImage = new Bitmap(20, 20);
+						app.pushScreen(new ResultScreen(result, "file://"+imagePath));
+
 						return;
 					}
 				} else {
@@ -451,7 +486,10 @@ public class YPMainScreen extends MainScreen {
 		 * uri.
 		 */
 		private boolean isURI(String uri) {
-			return uri.startsWith("http://");
+			if (uri.startsWith("https://") || uri.startsWith("http://")
+					|| uri.startsWith("www"))
+				return true;
+			return false;
 		}
 
 		/**
@@ -485,5 +523,44 @@ public class YPMainScreen extends MainScreen {
 				Dialog.alert(message);
 			}
 		}
+	}
+
+	private void playBeeb(int soundId) {
+		try {
+			String soundName = "/s";
+			if (soundId == 0)
+				soundName += "1.mp3";
+			else if (soundId == 1)
+				soundName += "2.mp3";
+			else if (soundId == 2)
+				soundName += "3.mp3";
+			else if (soundId == 3)
+				soundName += "4.mp3";
+
+			Class cl = getClass().forName("th.co.yellowpages.ui.AlbumScreen");
+			InputStream is = cl.getResourceAsStream(soundName);
+			Player p = javax.microedition.media.Manager.createPlayer(is,
+					"audio/mpeg");
+			p.realize();
+			p.start();
+		} catch (IOException ioe) {
+			System.out.println("ioe: >> " + ioe.getMessage());
+		} catch (javax.microedition.media.MediaException me) {
+			System.out.println("me: >> " + me.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public static Bitmap SizePic(EncodedImage Resizor, int Height, int Width) {
+		int multH;
+		int multW;
+		int currHeight = Resizor.getHeight();
+		int currWidth = Resizor.getWidth();
+		multH = Fixed32.div(Fixed32.toFP(currHeight), Fixed32.toFP(Height));
+		multW = Fixed32.div(Fixed32.toFP(currWidth), Fixed32.toFP(Width));
+		Resizor = Resizor.scaleImage32(multW, multH);
+		return Resizor.getBitmap();
 	}
 }

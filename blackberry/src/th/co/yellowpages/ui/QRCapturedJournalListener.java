@@ -26,27 +26,31 @@ import th.co.yellowpages.zxing.client.rim.util.Log;
 
 /**
  * The listener that is fired when an image file is added to the file system.
- *
+ * 
  * This code was contributed by LifeMarks.
- *
+ * 
  * @author Matt York (matt@lifemarks.mobi)
  */
 public class QRCapturedJournalListener implements FileSystemJournalListener {
 
-  private final YPMainScreen screen;
+	private final YPMainScreen screen;
 
-  QRCapturedJournalListener(YPMainScreen screen) {
-    this.screen = screen;
-  }
+	QRCapturedJournalListener(YPMainScreen screen) {
+		this.screen = screen;
+	}
 
-  public void fileJournalChanged() {
-    long lookUSN = FileSystemJournal.getNextUSN() - 1; // the last file added to the filesystem
-    Log.debug("lookUSN: " + lookUSN);
-    FileSystemJournalEntry entry = FileSystemJournal.getEntry(lookUSN);
-    if (entry != null && entry.getEvent() == FileSystemJournalEntry.FILE_ADDED) {
-      Log.info("Got file: " + entry.getPath() + " @: " + new Date());
-      screen.imageSaved(entry.getPath());
-    }
-  }
-
+	public void fileJournalChanged() {
+		long lookUSN = FileSystemJournal.getNextUSN() - 1; // the last file
+		// added to the
+		// filesystem
+		Log.debug("lookUSN: " + lookUSN);
+		FileSystemJournalEntry entry = FileSystemJournal.getEntry(lookUSN);
+		if (entry != null
+				&& entry.getEvent() == FileSystemJournalEntry.FILE_ADDED) {
+			Log.info("Got file: " + entry.getPath() + " @: " + new Date());
+			// System.getProperty("fileconn.dir.memorycard.photos");
+			// entry.getPath()
+			screen.imageSaved(entry.getPath());
+		}
+	}
 }

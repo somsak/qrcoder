@@ -16,45 +16,50 @@
 
 package th.co.yellowpages.zxing.client.rim.persistence.history;
 
+import net.rim.device.api.i18n.SimpleDateFormat;
 import net.rim.device.api.util.Persistable;
 
 import java.util.Date;
 
 /**
  * A single decoded history item that is stored by the decode history.
- *
+ * 
  * This code was contributed by LifeMarks.
  * 
  * @author Matt York (matt@lifemarks.mobi)
  */
 public final class DecodeHistoryItem implements Persistable {
 
-  private String date;
-  private String uri;
+	private String date;
+	private String content;
 
-  private DecodeHistoryItem() {
-    date = new Date().toString();
-  }
+	private DecodeHistoryItem() {
+		SimpleDateFormat format = new SimpleDateFormat(
+				"yyyy-MMM-dd HH:mm:ss");
 
-  public DecodeHistoryItem(String uri) {
-    this();
-    this.uri = uri;
-  }
+		Date temp = new Date();
+		date = format.format(temp);
+	}
 
-  public void setDate(String date) {
-    this.date = date;
-  }
+	public DecodeHistoryItem(String content) {
+		this();
+		this.content = content;
+	}
 
-  public String getDate() {
-    return date;
-  }
+	public void setDate(String date) {
+		this.date = date;
+	}
 
-  public void setURI(String uri) {
-    this.uri = uri;
-  }
+	public String getDate() {
+		return date;
+	}
 
-  public String getURI() {
-    return uri;
-  }
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getContent() {
+		return content;
+	}
 
 }
