@@ -39,14 +39,16 @@ import net.rim.device.api.ui.UiEngine;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.container.DialogFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
+import net.rim.device.api.ui.container.PopupScreen;
 
 public class AlbumScreen extends MainScreen {
 
 	private ThumbnailField thumbs = null;
 	private boolean selectable = true;
 	private ZXingUiApplication app;
-
+	
 	public AlbumScreen() {
 		LabelField title = new LabelField("QRCoder", DrawStyle.ELLIPSIS
 				| USE_ALL_WIDTH);
@@ -164,6 +166,7 @@ public class AlbumScreen extends MainScreen {
 	private class ThumbnailListener implements Listener {
 		public void thumbnailSelected(final Bitmap thumbnail, int index,
 				String filename) {
+			
 			FileConnection file = null;
 			InputStream is = null;
 			Image selectedImage = null;
@@ -249,13 +252,25 @@ public class AlbumScreen extends MainScreen {
 								decodeHistoryItem);
 					}
 
-					Integer soundInt = AppSettings.getInstance()
-							.getIntegerItem(AppSettings.SETTING_BEEP_SOUND);
-					if (soundInt == null)
-						soundInt = new Integer(0);
-					playBeeb(soundInt.intValue());
+					Boolean isSoundEnable = AppSettings
+							.getInstance()
+							.getBooleanItem(
+									AppSettings.SETTING_ENABLE_DISABLE_BEEP_SOUND);
 
+					if (isSoundEnable != null
+							&& isSoundEnable.booleanValue() == true) {
+						Integer soundInt = AppSettings.getInstance()
+								.getIntegerItem(AppSettings.SETTING_BEEP_SOUND);
+						
+						if (soundInt == null)
+							soundInt = new Integer(0);
+						
+						YPMainScreen.playBeeb(soundInt.intValue());
+					}
+					
 					app.pushScreen(new ResultScreen(result, filename));
+					
+					invalidate();
 				}
 			}
 
@@ -264,39 +279,12 @@ public class AlbumScreen extends MainScreen {
 		public void selectionCanceled() {
 
 		}
+		
 	}
 
 	private void setupListener(ThumbnailField thumbs, boolean selectable) {
 		if (selectable) {
 			thumbs.setListener(new ThumbnailListener());
-		}
-	}
-
-	private void playBeeb(int soundId) {
-		try {
-			String soundName = "/s";
-			if (soundId == 0)
-				soundName += "1.mp3";
-			else if (soundId == 1)
-				soundName += "2.mp3";
-			else if (soundId == 2)
-				soundName += "3.mp3";
-			else if (soundId == 3)
-				soundName += "4.mp3";
-
-			Class cl = getClass().forName("th.co.yellowpages.ui.AlbumScreen");
-			InputStream is = cl.getResourceAsStream(soundName);
-			Player p = javax.microedition.media.Manager.createPlayer(is,
-					"audio/mpeg");
-			p.realize();
-			p.start();
-		} catch (IOException ioe) {
-			System.out.println("ioe: >> " + ioe.getMessage());
-		} catch (javax.microedition.media.MediaException me) {
-			System.out.println("me: >> " + me.getMessage());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
 		}
 	}
 }

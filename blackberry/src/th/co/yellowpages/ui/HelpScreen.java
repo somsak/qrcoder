@@ -22,6 +22,7 @@ import net.rim.device.api.browser.field2.BrowserField;
 import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.Ui;
 import net.rim.device.api.ui.UiEngine;
@@ -56,20 +57,50 @@ public class HelpScreen extends MainScreen {
 		browserField = new BrowserField();
 		browserField.requestContent(DEFAULT_URL);
 		vfm.add(browserField);
-
-		Manager hfm = new HorizontalFieldManager(FIELD_HCENTER);
-		Field backButton = new ButtonField(BACK_LABEL,
-				ButtonField.CONSUME_CLICK);
-		backButton.setChangeListener(new ButtonListener(this));
-		hfm.add(backButton);
-
-		Field doneButton = new ButtonField(DONE_LABEL,
-				ButtonField.CONSUME_CLICK);
-		doneButton.setChangeListener(new ButtonListener(this));
-		hfm.add(doneButton);
-		
-		vfm.add(hfm);
 		add(vfm);
+		
+		addMenuItem(new BackMenu());
+		addMenuItem(new ForwardMenu());
+		addMenuItem(new DoneMenu(this));
+	}
+
+	private class DoneMenu extends MenuItem {
+		private final Screen screen;
+		
+		public DoneMenu(Screen screen) {
+			super("Done", 0, 100);
+			this.screen = screen;
+		}
+
+		public void run() {
+			UiEngine ui = Ui.getUiEngine();
+			ui.popScreen(screen);
+		}
+
+	}
+
+	private class BackMenu extends MenuItem {
+		public BackMenu() {
+			super("Back", 0, 100);
+		}
+
+		public void run() {
+			browserField.setFocus();
+			browserField.back();
+		}
+
+	}
+
+	private class ForwardMenu extends MenuItem {
+		public ForwardMenu() {
+			super("Forward", 0, 100);
+		}
+
+		public void run() {
+			browserField.setFocus();
+			browserField.forward();
+		}
+
 	}
 
 	/**
@@ -89,6 +120,7 @@ public class HelpScreen extends MainScreen {
 				if (button.getLabel().equals(BACK_LABEL)) {
 					browserField.setFocus();
 					browserField.back();
+					browserField.forward();
 				} else if (button.getLabel().equals(DONE_LABEL)) {
 					UiEngine ui = Ui.getUiEngine();
 					ui.popScreen(screen);

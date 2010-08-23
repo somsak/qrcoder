@@ -25,6 +25,7 @@ import th.co.yellowpages.zxing.client.rim.util.Log;
 import th.co.yellowpages.zxing.client.rim.util.ReasonableTimer;
 import th.co.yellowpages.zxing.client.rim.util.URLDecoder;
 import th.co.yellowpages.zxing.common.GlobalHistogramBinarizer;
+import th.co.yellowpages.zxing.qrcode.QRCodeReader;
 import net.rim.blackberry.api.browser.Browser;
 import net.rim.blackberry.api.browser.BrowserSession;
 import net.rim.device.api.math.Fixed32;
@@ -75,7 +76,6 @@ public class YPMainScreen extends MainScreen {
 	private final QRCapturedJournalListener imageListener;
 	private PopupScreen popup;
 	private final Reader reader;
-	private final Hashtable readerHints;
 
 	public YPMainScreen() {
 		super(DEFAULT_MENU | DEFAULT_CLOSE);
@@ -93,8 +93,7 @@ public class YPMainScreen extends MainScreen {
 		imageListener = new QRCapturedJournalListener(this);
 
 		reader = new MultiFormatReader();
-		readerHints = new Hashtable(1);
-		// readerHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+
 	}
 
 	/**
@@ -334,6 +333,7 @@ public class YPMainScreen extends MainScreen {
 				} catch (Exception e) {
 					Log.error("!!! Problem invoking camera.!!!: " + e);
 				}
+//				app.pushScreen(new CameraScreen());
 			} else if (buttonName.equals(ALBUM_BUTTON_LABEL)) {
 				app.pushScreen(new AlbumScreen());
 			} else if (buttonName.equals(ENCODER_BUTTON_LABEL)) {
@@ -355,7 +355,6 @@ public class YPMainScreen extends MainScreen {
 	private final class FileConnectionThread implements Runnable {
 
 		private final String imagePath;
-		private Bitmap bitmapImage;
 
 		private FileConnectionThread(String imagePath) {
 			this.imagePath = imagePath;
@@ -365,13 +364,13 @@ public class YPMainScreen extends MainScreen {
 			FileConnection file = null;
 			InputStream is = null;
 			Image capturedImage = null;
+
 			try {
-				file = (FileConnection) Connector.open("file://"+imagePath,
+				file = (FileConnection) Connector.open("file://" + imagePath,
 						Connector.READ_WRITE);
-				
+
 				is = file.openInputStream();
 				capturedImage = Image.createImage(is);
-				//is.close();
 			} catch (Exception e) {
 				Log.error("Problem creating image: " + e);
 				System.out.println("Problem creating image: " + e.getMessage());
@@ -383,13 +382,6 @@ public class YPMainScreen extends MainScreen {
 				try {
 					if (is != null) {
 						is.close();
-					}
-					if (file != null && file.exists()) {
-						 file.delete();
-						if (file.isOpen()) {
-							file.close();
-						}
-						Log.info("Deleted image file.");
 					}
 				} catch (IOException ioe) {
 					Log.error("Error while closing file: " + ioe);
@@ -404,14 +396,16 @@ public class YPMainScreen extends MainScreen {
 						new GlobalHistogramBinarizer(source));
 				Result result;
 				ReasonableTimer decodingTimer = null;
+
 				try {
 					decodingTimer = new ReasonableTimer();
 					Log.info("Attempting to decode image...");
-					result = reader.decode(bitmap, readerHints);
+					result = reader.decode(bitmap);
 					decodingTimer.finished();
 				} catch (ReaderException e) {
 					Log.error("Could not decode image: " + e);
-					System.out.println("Could not decode image: " + e.toString());
+					System.out.println("Could not decode image: "
+							+ e.getMessage());
 					decodingTimer.finished();
 					removeProgressBar();
 					invalidate();
@@ -425,53 +419,65 @@ public class YPMainScreen extends MainScreen {
 					} else {
 						showMessage("A QR Code was not found in the image.");
 					}
+					deleteFile(file);
 					return;
 				}
 				if (result != null) {
 					String resultText = result.getText();
 					Log.info("result: " + resultText);
-					if (isURI(resultText)) {
-						resultText = URLDecoder.decode(resultText);
-						removeProgressBar();
-						invalidate();
-						if (!decodingTimer.wasResonableTime()
-								&& !AppSettings.getInstance().getBooleanItem(
-										AppSettings.SETTING_CAM_RES_MSG)
-										.booleanValue()) {
-							showMessage("We detected that the decoding process took quite a while. "
-									+ "It will be much faster if you decrease your camera's resolution (640x480).");
-						}
+					resultText = URLDecoder.decode(resultText);
+					removeProgressBar();
+					invalidate();
+					if (!decodingTimer.wasResonableTime()
+							&& !AppSettings.getInstance().getBooleanItem(
+									AppSettings.SETTING_CAM_RES_MSG)
+									.booleanValue()) {
+						showMessage("We detected that the decoding process took quite a while. "
+								+ "It will be much faster if you decrease your camera's resolution (640x480).");
+					}
 
-						boolean isDuplicate = false;
+					boolean isDuplicate = false;
 
-						DecodeHistory history = DecodeHistory.getInstance();
-						for (int i = 0; i < history.getNumItems(); i++) {
-							DecodeHistoryItem item = history.getItemAt(i);
-							if (item.getContent().equals(resultText)) {
-								isDuplicate = true;
-								break;
-							}
+					DecodeHistory history = DecodeHistory.getInstance();
+					for (int i = 0; i < history.getNumItems(); i++) {
+						DecodeHistoryItem item = history.getItemAt(i);
+						if (item.getContent().equals(resultText)) {
+							isDuplicate = true;
+							break;
 						}
+					}
 
-						if (isDuplicate == false) {
-							DecodeHistory.getInstance().addHistoryItem(
-									new DecodeHistoryItem(resultText));
-						}
+					if (isDuplicate == false) {
+						DecodeHistory.getInstance().addHistoryItem(
+								new DecodeHistoryItem(resultText));
+					}
+
+					Boolean isSoundEnable = AppSettings
+							.getInstance()
+							.getBooleanItem(
+									AppSettings.SETTING_ENABLE_DISABLE_BEEP_SOUND);
+					
+					if (isSoundEnable != null && isSoundEnable.booleanValue() == true) {
 
 						Integer soundInt = AppSettings.getInstance()
 								.getIntegerItem(AppSettings.SETTING_BEEP_SOUND);
+
 						if (soundInt == null)
 							soundInt = new Integer(0);
-						playBeeb(soundInt.intValue());
-						bitmapImage = new Bitmap(20, 20);
-						app.pushScreen(new ResultScreen(result, "file://"+imagePath));
 
-						return;
+						YPMainScreen.playBeeb(soundInt.intValue());
 					}
+					
+					app.pushScreen(new ResultScreen(result, "file://"
+							+ imagePath));
+
+					deleteFile(file);
+					return;
 				} else {
 					removeProgressBar();
 					invalidate();
 					showMessage("A QR Code was not found in the image.");
+					deleteFile(file);
 					return;
 				}
 
@@ -479,25 +485,6 @@ public class YPMainScreen extends MainScreen {
 
 			removeProgressBar();
 			invalidate();
-		}
-
-		/**
-		 * Quick check to see if the result of decoding the qr code was a valid
-		 * uri.
-		 */
-		private boolean isURI(String uri) {
-			if (uri.startsWith("https://") || uri.startsWith("http://")
-					|| uri.startsWith("www"))
-				return true;
-			return false;
-		}
-
-		/**
-		 * Invokes the web browser and browses to the given uri.
-		 */
-		private void invokeBrowser(String uri) {
-			BrowserSession browserSession = Browser.getDefaultSession();
-			browserSession.displayPage(uri);
 		}
 
 		/**
@@ -523,9 +510,28 @@ public class YPMainScreen extends MainScreen {
 				Dialog.alert(message);
 			}
 		}
+
+		/**
+		 * Delete capture image file.
+		 * 
+		 * @param file
+		 */
+		private void deleteFile(FileConnection file) {
+			try {
+				if (file != null && file.exists()) {
+					file.delete();
+					if (file.isOpen()) {
+						file.close();
+					}
+					Log.info("Deleted image file.");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	private void playBeeb(int soundId) {
+	public static void playBeeb(int soundId) {
 		try {
 			String soundName = "/s";
 			if (soundId == 0)
@@ -537,7 +543,8 @@ public class YPMainScreen extends MainScreen {
 			else if (soundId == 3)
 				soundName += "4.mp3";
 
-			Class cl = getClass().forName("th.co.yellowpages.ui.AlbumScreen");
+			// getClass();
+			Class cl = Class.forName("th.co.yellowpages.ui.YPMainScreen");
 			InputStream is = cl.getResourceAsStream(soundName);
 			Player p = javax.microedition.media.Manager.createPlayer(is,
 					"audio/mpeg");

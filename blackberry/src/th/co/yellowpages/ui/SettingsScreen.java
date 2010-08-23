@@ -29,6 +29,7 @@ import net.rim.device.api.ui.UiEngine;
 import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.component.ButtonField;
 import net.rim.device.api.ui.component.CheckboxField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.container.MainScreen;
@@ -139,9 +140,11 @@ public class SettingsScreen extends MainScreen {
 				changes = true;
 				break;
 			case 3:// clear history
-				// TODO confirm
-				DecodeHistory.getInstance().clear();
-				DecodeHistory.getInstance().persist();
+				int clearConfirm = Dialog.ask(Dialog.D_YES_NO, "Do you want to clear decode history?", Dialog.NO);
+				if (clearConfirm == Dialog.YES){
+					DecodeHistory.getInstance().clear();
+					DecodeHistory.getInstance().persist();     
+				}
 				break;
 			case 4:// ok
 				if (changes) {
