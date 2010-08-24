@@ -16,7 +16,10 @@ import net.rim.blackberry.api.browser.BrowserSession;
 import net.rim.blackberry.api.invoke.Invoke;
 import net.rim.blackberry.api.invoke.MessageArguments;
 import net.rim.blackberry.api.invoke.PhoneArguments;
+import net.rim.blackberry.api.mail.Address;
 import net.rim.blackberry.api.mail.Message;
+import net.rim.blackberry.api.mail.MessagingException;
+import net.rim.blackberry.api.mail.PINAddress;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.*;
@@ -57,7 +60,7 @@ public class ResultScreen extends MainScreen {
 
 				EncodedImage eimg = EncodedImage.createEncodedImage(image, 0,
 						-1);
-				bitmap = YPMainScreen.SizePic(eimg, 60, 60);
+				bitmap = YPMainScreen.scaleImage(eimg, 60, 60);
 
 				initializeResultScreen();
 			}
@@ -87,7 +90,7 @@ public class ResultScreen extends MainScreen {
 
 		BitmapField bitmapField = new BitmapField(bitmap, FIELD_HCENTER);
 		bitmapField.setMargin(10, 0, 0, 0);
-		
+
 		Bitmap logoBitmap = null;
 
 		LabelField typeLabel = new LabelField("", FIELD_HCENTER);
@@ -119,7 +122,7 @@ public class ResultScreen extends MainScreen {
 			logoBitmap = Bitmap.getBitmapResource("www_icon.png");
 			addMenuItem(new OpenBrowserMenu());
 			addMenuItem(new SendEmailMenu(ParsedResultType.URI));
-			// addMenuItem(new SendSMSMenu());
+			addMenuItem(new SendPINMenu());
 
 		} else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
 
@@ -127,7 +130,8 @@ public class ResultScreen extends MainScreen {
 			foundLabel.setText("Found email address");
 			logoBitmap = Bitmap.getBitmapResource("mail_icon.png");
 			addMenuItem(new SendEmailMenu(ParsedResultType.EMAIL_ADDRESS));
-
+			addMenuItem(new SendPINMenu());
+			
 		} else if (type.equals(ParsedResultType.SMS)) {
 
 		} else if (type.equals(ParsedResultType.TEL)) {
@@ -137,6 +141,7 @@ public class ResultScreen extends MainScreen {
 			logoBitmap = Bitmap.getBitmapResource("tel_icon.png");
 			resultText = resultText.substring(4, resultText.length());
 			addMenuItem(new DialNumberMenu());
+			addMenuItem(new SendPINMenu());
 
 		} else {
 
@@ -145,7 +150,7 @@ public class ResultScreen extends MainScreen {
 			logoBitmap = Bitmap.getBitmapResource("www_icon.png");
 			addMenuItem(new WebSearchMenu());
 			addMenuItem(new SendEmailMenu(ParsedResultType.TEXT));
-			// addMenuItem(new SendSMSMenu());
+			addMenuItem(new SendPINMenu());
 
 		}
 
@@ -270,5 +275,28 @@ public class ResultScreen extends MainScreen {
 				// TODO: handle exception
 			}
 		}
+	}
+
+	private class SendPINMenu extends MenuItem {
+		public SendPINMenu() {
+			super("Send PIN", 0, 100);
+		}
+
+		public void run() {
+			String text = result.getText();
+			if (text == null)
+				return;
+
+			try {
+				MessageArguments messageArg = new MessageArguments(
+						MessageArguments.ARG_NEW_PIN, "", "", text);
+				
+				Invoke.invokeApplication(Invoke.APP_TYPE_MESSAGES,
+						messageArg);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 }

@@ -560,7 +560,7 @@ public class YPMainScreen extends MainScreen {
 		}
 	}
 
-	public static Bitmap SizePic(EncodedImage Resizor, int Height, int Width) {
+	public static Bitmap scaleImage(EncodedImage Resizor, int Height, int Width) {
 		int multH;
 		int multW;
 		int currHeight = Resizor.getHeight();
