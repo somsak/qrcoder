@@ -11,6 +11,7 @@ import th.co.yellowpages.zxing.client.result.ParsedResult;
 import th.co.yellowpages.zxing.client.result.ParsedResultType;
 import th.co.yellowpages.zxing.client.result.ResultParser;
 import th.co.yellowpages.zxing.client.rim.ZXingUiApplication;
+import th.co.yellowpages.zxing.client.rim.persistence.AppSettings;
 import net.rim.blackberry.api.browser.Browser;
 import net.rim.blackberry.api.browser.BrowserSession;
 import net.rim.blackberry.api.invoke.Invoke;
@@ -35,6 +36,7 @@ public class ResultScreen extends MainScreen {
 
 	private ZXingUiApplication app;
 	private Result result;
+	private ParsedResult resultParser;
 	private Bitmap bitmap;
 
 	public ResultScreen(Result result, String filename) {
@@ -62,6 +64,8 @@ public class ResultScreen extends MainScreen {
 						-1);
 				bitmap = YPMainScreen.scaleImage(eimg, 60, 60);
 
+				beepSound();
+
 				initializeResultScreen();
 			}
 
@@ -81,6 +85,24 @@ public class ResultScreen extends MainScreen {
 		setTitle(title);
 
 		app = (ZXingUiApplication) UiApplication.getUiApplication();
+
+		initializeResultScreen();
+	}
+
+	public ResultScreen(Result result, byte[] imageData) {
+		this.result = result;
+
+		LabelField title = new LabelField("QRCoder", DrawStyle.ELLIPSIS
+				| USE_ALL_WIDTH);
+		title.setMargin(5, 0, 0, 5);
+		setTitle(title);
+
+		app = (ZXingUiApplication) UiApplication.getUiApplication();
+
+		EncodedImage eimg = EncodedImage.createEncodedImage(imageData, 0, -1);
+		bitmap = YPMainScreen.scaleImage(eimg, 60, 60);
+
+		beepSound();
 
 		initializeResultScreen();
 	}
@@ -108,10 +130,8 @@ public class ResultScreen extends MainScreen {
 				1, 0)));
 		foundLabel.setMargin(0, 5, 0, 10);
 
-		ParsedResult resultParser = ResultParser.parseResult(result);
+		resultParser = ResultParser.parseResult(result);
 		ParsedResultType type = resultParser.getType();
-
-		String resultText = result.getText();
 
 		removeAllMenuItems();
 
@@ -131,16 +151,22 @@ public class ResultScreen extends MainScreen {
 			logoBitmap = Bitmap.getBitmapResource("mail_icon.png");
 			addMenuItem(new SendEmailMenu(ParsedResultType.EMAIL_ADDRESS));
 			addMenuItem(new SendPINMenu());
-			
-		} else if (type.equals(ParsedResultType.SMS)) {
+
+		} else if (type.equals(ParsedResultType.ADDRESSBOOK)) {
+
+			typeLabel.setText("Type: " + type.ADDRESSBOOK);
+			foundLabel.setText("Found contact info");
+			logoBitmap = Bitmap.getBitmapResource("tel_icon.png");
+			addMenuItem(new SendEmailMenu(ParsedResultType.ADDRESSBOOK));
+			addMenuItem(new SendPINMenu());
 
 		} else if (type.equals(ParsedResultType.TEL)) {
 
 			typeLabel.setText("Type: " + type.TEL);
 			foundLabel.setText("Found phone number");
 			logoBitmap = Bitmap.getBitmapResource("tel_icon.png");
-			resultText = resultText.substring(4, resultText.length());
 			addMenuItem(new DialNumberMenu());
+			addMenuItem(new SendEmailMenu(ParsedResultType.TEL));
 			addMenuItem(new SendPINMenu());
 
 		} else {
@@ -164,7 +190,8 @@ public class ResultScreen extends MainScreen {
 		// add focusable to fix scroll bug.
 		hfm.add(new LabelField("", FOCUSABLE));
 
-		LabelField resultLabel = new LabelField(resultText, FIELD_HCENTER);
+		LabelField resultLabel = new LabelField(
+				resultParser.getDisplayResult(), FIELD_HCENTER | FIELD_VCENTER);
 		resultLabel.setMargin(10, 10, 0, 10);
 
 		VerticalFieldManager vfm = new VerticalFieldManager(USE_ALL_WIDTH);
@@ -177,6 +204,23 @@ public class ResultScreen extends MainScreen {
 		vfm.add(new LabelField("", FOCUSABLE));
 
 		add(vfm);
+	}
+
+	private void beepSound() {
+		Boolean isSoundEnable = AppSettings.getInstance().getBooleanItem(
+				AppSettings.SETTING_ENABLE_DISABLE_BEEP_SOUND);
+
+		if (isSoundEnable != null && isSoundEnable.booleanValue() == true) {
+
+			Integer soundInt = AppSettings.getInstance().getIntegerItem(
+					AppSettings.SETTING_BEEP_SOUND);
+
+			if (soundInt == null)
+				soundInt = new Integer(0);
+
+			YPMainScreen.playBeeb(soundInt.intValue());
+		}
+
 	}
 
 	/**
@@ -212,11 +256,11 @@ public class ResultScreen extends MainScreen {
 			try {
 				String sendTo = "";
 				String body = "";
-				if (type.equals(ParsedResultType.URI)
-						|| type.equals(ParsedResultType.TEXT)) {
-					body = result.getText();
-				} else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
-					sendTo = result.getText();
+
+				if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
+					sendTo = resultParser.getDisplayResult();
+				} else {
+					body = resultParser.getDisplayResult();
 				}
 
 				MessageArguments messageArg = new MessageArguments(
@@ -233,7 +277,7 @@ public class ResultScreen extends MainScreen {
 		}
 
 		public void run() {
-			String text = result.getText();
+			String text = resultParser.getDisplayResult();
 			if (text == null)
 				return;
 			String uri = "http://www.google.com/search?q=" + text.trim();
@@ -248,7 +292,7 @@ public class ResultScreen extends MainScreen {
 		}
 
 		public void run() {
-			String uri = result.getText();
+			String uri = resultParser.getDisplayResult();
 			if (uri == null)
 				return;
 
@@ -263,7 +307,7 @@ public class ResultScreen extends MainScreen {
 		}
 
 		public void run() {
-			String phoneNumber = result.getText();
+			String phoneNumber = resultParser.getDisplayResult();
 			if (phoneNumber == null)
 				return;
 			try {
@@ -283,16 +327,15 @@ public class ResultScreen extends MainScreen {
 		}
 
 		public void run() {
-			String text = result.getText();
+			String text = resultParser.getDisplayResult();
 			if (text == null)
 				return;
 
 			try {
 				MessageArguments messageArg = new MessageArguments(
 						MessageArguments.ARG_NEW_PIN, "", "", text);
-				
-				Invoke.invokeApplication(Invoke.APP_TYPE_MESSAGES,
-						messageArg);
+
+				Invoke.invokeApplication(Invoke.APP_TYPE_MESSAGES, messageArg);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

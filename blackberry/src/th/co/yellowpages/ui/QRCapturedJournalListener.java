@@ -66,7 +66,7 @@ public class QRCapturedJournalListener implements FileSystemJournalListener {
 			String imagePath = entry.getPath();
 			System.out.println(">> " + imagePath);
 			resizeImage(imagePath);
-			screen.imageSaved(imagePath);
+			// screen.imageSaved(imagePath);
 		}
 	}
 
@@ -84,27 +84,27 @@ public class QRCapturedJournalListener implements FileSystemJournalListener {
 
 				EncodedImage eimg = EncodedImage.createEncodedImage(image, 0,
 						-1);
-				
+
 				if (fc != null && fc.exists()) {
-					if(eimg.getHeight() > 640 && eimg.getWidth() > 480)
+					if (eimg.getHeight() > 640 && eimg.getWidth() > 480)
 						fc.delete();
 					if (fc.isOpen()) {
 						fc.close();
 					}
 				}
 
-				
 				if (eimg.getWidth() > 640 && eimg.getHeight() > 480) {
 					fc = (FileConnection) Connector.open("file://" + filename,
 							Connector.READ_WRITE);
 					if (!fc.exists())
 						fc.create();
 					OutputStream outStream = fc.openOutputStream();
-					
+
 					Bitmap tempBitmap = eimg.getBitmap();
 					Bitmap bitmap = new Bitmap(640, 480);
 					tempBitmap.scaleInto(bitmap, Bitmap.FILTER_LANCZOS);
-					JPEGEncodedImage jpegImg = JPEGEncodedImage.encode(bitmap, 100);
+					JPEGEncodedImage jpegImg = JPEGEncodedImage.encode(bitmap,
+							100);
 					byte[] data = jpegImg.getData();
 					outStream.write(data);
 					outStream.close();

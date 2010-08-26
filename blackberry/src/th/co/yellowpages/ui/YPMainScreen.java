@@ -32,7 +32,6 @@ import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Color;
-import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
@@ -44,9 +43,7 @@ import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.ButtonField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.container.DialogFieldManager;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.container.PopupScreen;
@@ -73,9 +70,7 @@ public class YPMainScreen extends MainScreen {
 	private static final int LABEL_FONT_SIZE = 16;
 
 	private final ZXingUiApplication app;
-	private final QRCapturedJournalListener imageListener;
 	private PopupScreen popup;
-	private final Reader reader;
 
 	public YPMainScreen() {
 		super(DEFAULT_MENU | DEFAULT_CLOSE);
@@ -90,9 +85,6 @@ public class YPMainScreen extends MainScreen {
 		initializeMainScreen();
 
 		app = (ZXingUiApplication) UiApplication.getUiApplication();
-		imageListener = new QRCapturedJournalListener(this);
-
-		reader = new MultiFormatReader();
 
 	}
 
@@ -262,44 +254,9 @@ public class YPMainScreen extends MainScreen {
 	}
 
 	/**
-	 * Handles the newly created file. If the file is a jpg image, from the
-	 * camera, the images is assumed to be a qrcode and decoding is attempted.
-	 */
-	void imageSaved(String imagePath) {
-		Log.info("Image saved: " + imagePath);
-		app.removeFileSystemJournalListener(imageListener);
-		if (imagePath.endsWith(".jpg") && imagePath.indexOf("IMG") >= 0) // a
-		// blackberry
-		// camera
-		// image
-		// file
-		{
-			Log.info("imageSaved - Got file: " + imagePath);
-			Camera.getInstance().exit();
-			Log.info("camera exit finished");
-			app.requestForeground();
-
-			DialogFieldManager manager = new DialogFieldManager();
-			popup = new PopupScreen(manager);
-			manager.addCustomField(new LabelField("Decoding image..."));
-
-			app.pushScreen(popup); // original
-			Log.info("started progress screen.");
-
-			Runnable fct = new FileConnectionThread(imagePath);
-			Log.info("Starting file connection thread.");
-			app.invokeLater(fct);
-			Log.info("Finished file connection thread.");
-		} else {
-			Log.error("Failed to locate camera image.");
-		}
-	}
-
-	/**
 	 * Closes the application and persists all required data.
 	 */
 	public void close() {
-		app.removeFileSystemJournalListener(imageListener);
 		DecodeHistory.getInstance().persist();
 		super.close();
 	}
@@ -326,14 +283,7 @@ public class YPMainScreen extends MainScreen {
 			Log.debug("*** fieldChanged: " + field.getIndex());
 
 			if (buttonName.equals(CAMERA_BUTTON_LABEL)) {
-				try {
-					app.addFileSystemJournalListener(imageListener);
-					Camera.getInstance().invoke(); // start camera
-					return;
-				} catch (Exception e) {
-					Log.error("!!! Problem invoking camera.!!!: " + e);
-				}
-//				app.pushScreen(new CameraScreen());
+				app.pushScreen(new CameraScreen());
 			} else if (buttonName.equals(ALBUM_BUTTON_LABEL)) {
 				app.pushScreen(new AlbumScreen());
 			} else if (buttonName.equals(ENCODER_BUTTON_LABEL)) {
@@ -345,190 +295,6 @@ public class YPMainScreen extends MainScreen {
 			}
 		}
 
-	}
-
-	/**
-	 * Thread that decodes the newly created image. If the image is successfully
-	 * decoded and the data is a URL, the browser is invoked and pointed to the
-	 * given URL.
-	 */
-	private final class FileConnectionThread implements Runnable {
-
-		private final String imagePath;
-
-		private FileConnectionThread(String imagePath) {
-			this.imagePath = imagePath;
-		}
-
-		public void run() {
-			FileConnection file = null;
-			InputStream is = null;
-			Image capturedImage = null;
-
-			try {
-				file = (FileConnection) Connector.open("file://" + imagePath,
-						Connector.READ_WRITE);
-
-				is = file.openInputStream();
-				capturedImage = Image.createImage(is);
-			} catch (Exception e) {
-				Log.error("Problem creating image: " + e);
-				System.out.println("Problem creating image: " + e.getMessage());
-				removeProgressBar();
-				invalidate();
-				showMessage("An error occured processing the image.");
-				return;
-			} finally {
-				try {
-					if (is != null) {
-						is.close();
-					}
-				} catch (IOException ioe) {
-					Log.error("Error while closing file: " + ioe);
-				}
-			}
-
-			if (capturedImage != null) {
-				Log.info("Got image...");
-				LuminanceSource source = new LCDUIImageLuminanceSource(
-						capturedImage);
-				BinaryBitmap bitmap = new BinaryBitmap(
-						new GlobalHistogramBinarizer(source));
-				Result result;
-				ReasonableTimer decodingTimer = null;
-
-				try {
-					decodingTimer = new ReasonableTimer();
-					Log.info("Attempting to decode image...");
-					result = reader.decode(bitmap);
-					decodingTimer.finished();
-				} catch (ReaderException e) {
-					Log.error("Could not decode image: " + e);
-					System.out.println("Could not decode image: "
-							+ e.getMessage());
-					decodingTimer.finished();
-					removeProgressBar();
-					invalidate();
-					boolean showResolutionMsg = !AppSettings.getInstance()
-							.getBooleanItem(AppSettings.SETTING_CAM_RES_MSG)
-							.booleanValue();
-					if (showResolutionMsg) {
-						showMessage("A QR Code was not found in the image. "
-								+ "We detected that the decoding process took quite a while. "
-								+ "It will be much faster if you decrease your camera's resolution (640x480).");
-					} else {
-						showMessage("A QR Code was not found in the image.");
-					}
-					deleteFile(file);
-					return;
-				}
-				if (result != null) {
-					String resultText = result.getText();
-					Log.info("result: " + resultText);
-					resultText = URLDecoder.decode(resultText);
-					removeProgressBar();
-					invalidate();
-					if (!decodingTimer.wasResonableTime()
-							&& !AppSettings.getInstance().getBooleanItem(
-									AppSettings.SETTING_CAM_RES_MSG)
-									.booleanValue()) {
-						showMessage("We detected that the decoding process took quite a while. "
-								+ "It will be much faster if you decrease your camera's resolution (640x480).");
-					}
-
-					boolean isDuplicate = false;
-
-					DecodeHistory history = DecodeHistory.getInstance();
-					for (int i = 0; i < history.getNumItems(); i++) {
-						DecodeHistoryItem item = history.getItemAt(i);
-						if (item.getContent().equals(resultText)) {
-							isDuplicate = true;
-							break;
-						}
-					}
-
-					if (isDuplicate == false) {
-						DecodeHistory.getInstance().addHistoryItem(
-								new DecodeHistoryItem(resultText));
-					}
-
-					Boolean isSoundEnable = AppSettings
-							.getInstance()
-							.getBooleanItem(
-									AppSettings.SETTING_ENABLE_DISABLE_BEEP_SOUND);
-					
-					if (isSoundEnable != null && isSoundEnable.booleanValue() == true) {
-
-						Integer soundInt = AppSettings.getInstance()
-								.getIntegerItem(AppSettings.SETTING_BEEP_SOUND);
-
-						if (soundInt == null)
-							soundInt = new Integer(0);
-
-						YPMainScreen.playBeeb(soundInt.intValue());
-					}
-					
-					app.pushScreen(new ResultScreen(result, "file://"
-							+ imagePath));
-
-					deleteFile(file);
-					return;
-				} else {
-					removeProgressBar();
-					invalidate();
-					showMessage("A QR Code was not found in the image.");
-					deleteFile(file);
-					return;
-				}
-
-			}
-
-			removeProgressBar();
-			invalidate();
-		}
-
-		/**
-		 * Syncronized version of removing progress dialog. NOTE: All methods
-		 * accessing the gui that are in seperate threads should syncronize on
-		 * app.getEventLock()
-		 */
-		private void removeProgressBar() {
-			synchronized (app.getAppEventLock()) {
-				if (popup != null) {
-					app.popScreen(popup);
-				}
-			}
-		}
-
-		/**
-		 * Syncronized version of showing a message dialog. NOTE: All methods
-		 * accessing the gui that are in seperate threads should syncronize on
-		 * app.getEventLock()
-		 */
-		private void showMessage(String message) {
-			synchronized (app.getAppEventLock()) {
-				Dialog.alert(message);
-			}
-		}
-
-		/**
-		 * Delete capture image file.
-		 * 
-		 * @param file
-		 */
-		private void deleteFile(FileConnection file) {
-			try {
-				if (file != null && file.exists()) {
-					file.delete();
-					if (file.isOpen()) {
-						file.close();
-					}
-					Log.info("Deleted image file.");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public static void playBeeb(int soundId) {

@@ -251,22 +251,6 @@ public class AlbumScreen extends MainScreen {
 						DecodeHistory.getInstance().addHistoryItem(
 								decodeHistoryItem);
 					}
-
-					Boolean isSoundEnable = AppSettings
-							.getInstance()
-							.getBooleanItem(
-									AppSettings.SETTING_ENABLE_DISABLE_BEEP_SOUND);
-
-					if (isSoundEnable != null
-							&& isSoundEnable.booleanValue() == true) {
-						Integer soundInt = AppSettings.getInstance()
-								.getIntegerItem(AppSettings.SETTING_BEEP_SOUND);
-						
-						if (soundInt == null)
-							soundInt = new Integer(0);
-						
-						YPMainScreen.playBeeb(soundInt.intValue());
-					}
 					
 					app.pushScreen(new ResultScreen(result, filename));
 					
