@@ -1,0 +1,305 @@
+<project name="QRCoder" default="clean" basedir=".">
+  <property file="../build.properties"/>
+
+  <!-- set global properties for this build -->
+  <property name="project.name" value="QRCoder Strip"/>
+  <property name="project.vendor" value="INOX"/>
+
+  <property name="polish" value="J2ME-polish"/>
+  <property name="ant-contrib" value="ant-contrib-1.0b3.jar"/>
+  <property name="antenna" value="antenna-bin-1.1.0-beta.jar"/>
+  <property name="preprocessor" value="preprocessor-v3-bin-1.2.jar"/>
+  <property name="ant-googlecode" value="ant-googlecode-0.0.0test.jar"/>
+  <property name="proguard" value="proguard.jar"/>
+  <property name="midp_home" value="j2mewtk"/>
+  <property name="security_domain" value="identified_third_party"/>
+  <property name="device.emulator" value="DefaultColorPhone"/>
+  <property name="device.run" value="Generic_midp20_cldc11"/>
+  <property name="svn.url" value="https://qrcoder.googlecode.com/svn/d"/>
+  
+  <!--
+  <property name="cldc5_lib" value="${midp_home}/import/cldc-1.1-java5.0.jar"/>
+  <property name="polish5_lib" value="${midp_home}/import/enough-j2mepolish-client-java5.jar"/>
+  <property name="cldc_lib" value="${midp_home}/lib/cldcapi11.jar"/>
+  <property name="midp_lib" value="${midp_home}/lib/midpapi20.jar"/>
+  <property name="mmapi_lib" value="${midp_home}/lib/mmapi.jar"/>
+  <property name="classpath" value="${preprocessor}:${midp_lib}:${cldc_lib}:${mmapi_lib}:${cldc5_lib}:${polish5_lib}"/>
+  -->
+
+  <property name="wtk.home" value="${midp_home}"/>
+  <!--
+  <property name="wtk.cldc.version" value="1.1"/>
+  <property name="wtk.midp.version" value="2.0"/>
+  -->
+  <property name="polish.home" location="${polish}"/>
+
+  <property name="top" value="."/>
+  <property name="devicedb" value="devicedb"/>
+  <property name="src" value="src"/>
+  <property name="res" value="res"/>
+  <property name="build" value="build"/>
+  <property name="dist" value="dist"/>
+  <property name="deploy" value="deploy"/>
+
+  <!--
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${ant-contrib}"/>
+  <taskdef resource="antenna.properties" classpath="${antenna}"/>
+  -->
+  <taskdef classname="de.enough.polish.ant.PolishTask" classpath="${polish.home}/lib/enough-j2mepolish-build.jar:${polish.home}/lib/jdom.jar" name="j2mepolish"/>
+
+  <target name="clean">
+    <!-- Delete our the ${build}, ${obf} and ${deploy} directory trees -->
+    <delete dir="${dist}"/>
+    <delete dir="${build}"/>
+    <delete dir="${deploy}"/>
+  </target>
+
+  <target name="init">
+    <property name="project.version" value="1.0"/>
+    <property name="project.prefix" value="${project.name}"/>
+    <property name="jar.url" value="http://qrcoder.googlecode.com/files/"/>
+    <property name="debug" value="false"/>
+    <property name="stable" value="false"/>
+    <property name="project.polish" value="false"/>
+    <!-- Create the build directory structure used by compile N deploy -->
+    <tstamp/>
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${deploy}"/>
+  </target>
+	
+  <target name="polish">
+    <property name="project.polish" value="true"/>
+  </target>
+
+  <target name="debug">
+    <property name="debug" value="true"/>
+    <property name="jar.url" value=""/>
+    <property name="project.prefix" value="${project.name}-debug"/>
+  </target>
+
+  <target name="stable">
+    <property name="stable" value="true"/>
+    <property name="project.prefix" value="${project.name}-stable"/>
+  </target>
+
+  <target name="beta">
+    <property name="beta" value="true"/>
+    <property name="project.prefix" value="${project.name}-beta"/>
+  </target>
+
+  <target name="run" depends="init">
+    <exec executable="${midp_home}/bin/emulator">
+      <arg line="-Xdescriptor:${dist}/${project.prefix}-${device.run}.jad -Xdevice:${device.emulator} -Xdomain:${security_domain}"/>
+    </exec>
+  </target>
+
+  <target name="build" depends="init">
+    <j2mepolish>
+      <info name="${project.name}"
+            version="${project.version}"
+            description="qrcoder"
+            vendorName="${project.vendor}"
+            infoUrl="http://qrcoder.googlecode.com/"
+            icon="/icon.png"
+            jarName="${project.prefix}-${polish.vendor}_${polish.name}_v${project.version}.jar"
+            jarUrl="${jar.url}${project.prefix}-${polish.vendor}_${polish.name}_v${project.version}.jar" />
+      <deviceRequirements if="debug">
+        <or>
+          
+          <requirement name="Identifier" value="Nokia/N73" />
+          <requirement name="Identifier" value="Nokia/E71" />        	
+          <!--
+          <requirement name="Identifier" value="BlackBerry/8900" />
+          <requirement name="Identifier" value="BlackBerry/9700" />
+          <requirement name="Identifier" value="Generic/midp20_cldc11" />
+          <requirement name="Identifier" value="Nokia/N73" />
+          <requirement name="Identifier" value="Palm/Treo755p" />
+          -->
+          <!--
+          <requirement name="Identifier" value="Nokia/N-Gage" />
+          -->
+        </or>
+      </deviceRequirements>
+      <deviceRequirements unless="debug">
+        <or>
+            <requirement name="Identifier" value="Nokia/N70" />
+        	  <requirement name="Identifier" value="Nokia/N73" />
+	          <requirement name="Identifier" value="Nokia/N95" />
+	          
+            <requirement name="Identifier" value="Nokia/E51" />
+            <requirement name="Identifier" value="Nokia/E71" />
+            
+	          <requirement name="Identifier" value="Generic/midp20_cldc11" />
+        <!--
+          <requirement name="Identifier" value="Dopod/818_Pro" />
+          <requirement name="Identifier" value="Generic/midp10_cldc10" />
+          <requirement name="Identifier" value="Generic/midp20_cldc10" />
+          <requirement name="Identifier" value="Generic/midp20_cldc11" />
+          <requirement name="Identifier" value="Generic/midp21_cldc11" />
+          <requirement name="Identifier" value="LG/KS360" />
+          <requirement name="Identifier" value="LG/KU990i" />
+          <requirement name="Identifier" value="Motorola/A1200" />
+          <requirement name="Identifier" value="Motorola/E6" />
+          <requirement name="Identifier" value="Motorola/V3i" />
+          <requirement name="Identifier" value="Native/WindowsMobile" />
+          <requirement name="Identifier" value="Nokia/2330c" />
+          <requirement name="Identifier" value="Nokia/2630" />
+          <requirement name="Identifier" value="Nokia/3110c" />
+          <requirement name="Identifier" value="Nokia/3120c" />
+          <requirement name="Identifier" value="Nokia/3220" />
+          <requirement name="Identifier" value="Nokia/5300" />
+          <requirement name="Identifier" value="Nokia/5310_XpressMusic" />
+          <requirement name="Identifier" value="Nokia/5320_XpressMusic" />
+          <requirement name="Identifier" value="Nokia/5500" />
+          <requirement name="Identifier" value="Nokia/5610" />
+          <requirement name="Identifier" value="Nokia/5800" />
+          <requirement name="Identifier" value="Nokia/6110_Navigator" />
+          <requirement name="Identifier" value="Nokia/6111" />
+          <requirement name="Identifier" value="Nokia/6120_classic" />
+          <requirement name="Identifier" value="Nokia/6230i" />
+          <requirement name="Identifier" value="Nokia/6233" />
+          <requirement name="Identifier" value="Nokia/6270" />
+          <requirement name="Identifier" value="Nokia/6300" />
+          <requirement name="Identifier" value="Nokia/6500_classic" />
+          <requirement name="Identifier" value="Nokia/6500_slide" />
+          <requirement name="Identifier" value="Nokia/6600" />
+          <requirement name="Identifier" value="Nokia/6630" />
+          <requirement name="Identifier" value="Nokia/6670" />
+          <requirement name="Identifier" value="Nokia/6681" />
+          <requirement name="Identifier" value="Nokia/7100_Supernova" />
+          <requirement name="Identifier" value="Nokia/7210_Supernova" />
+          <requirement name="Identifier" value="Nokia/7610" />
+          <requirement name="Identifier" value="Nokia/E51" />
+          <requirement name="Identifier" value="Nokia/E63" />
+          <requirement name="Identifier" value="Nokia/E65" />
+          <requirement name="Identifier" value="Nokia/E66" />
+          <requirement name="Identifier" value="Nokia/E70" />
+          <requirement name="Identifier" value="Nokia/E71" />
+          <requirement name="Identifier" value="Nokia/E72" />
+          <requirement name="Identifier" value="Nokia/E90" />
+          <requirement name="Identifier" value="Nokia/N70" />
+          <requirement name="Identifier" value="Nokia/N72" />
+          <requirement name="Identifier" value="Nokia/N73" />
+          <requirement name="Identifier" value="Nokia/N75" />
+          <requirement name="Identifier" value="Nokia/N76" />
+          <requirement name="Identifier" value="Nokia/N78" />
+          <requirement name="Identifier" value="Nokia/N81" />
+          <requirement name="Identifier" value="Nokia/N82" />
+          <requirement name="Identifier" value="Nokia/N95" />
+          <requirement name="Identifier" value="Nokia/N97" />
+          <requirement name="Identifier" value="Nokia/N-Gage" />
+          <requirement name="Identifier" value="Palm/Treo755p" />
+          <requirement name="Identifier" value="Samsung/SGH-D900" />
+          <requirement name="Identifier" value="Samsung/SGH-E250" />
+          <requirement name="Identifier" value="Samsung/SGH-E590" />
+          <requirement name="Identifier" value="Samsung/SGH-I550" />
+          <requirement name="Identifier" value="Samsung/SGH-J750" />
+          <requirement name="Identifier" value="Samsung/SGH-U600" />
+          <requirement name="Identifier" value="Samsung/SGH-U800" />
+          <requirement name="Identifier" value="Siemens/EL71" />
+          <requirement name="Identifier" value="Sony-Ericsson/G705" />
+          <requirement name="Identifier" value="Sony-Ericsson/G900" />
+          <requirement name="Identifier" value="Sony-Ericsson/K510" />
+          <requirement name="Identifier" value="Sony-Ericsson/K550" />
+          <requirement name="Identifier" value="Sony-Ericsson/K750" />
+          <requirement name="Identifier" value="Sony-Ericsson/K770" />
+          <requirement name="Identifier" value="Sony-Ericsson/K790" />
+          <requirement name="Identifier" value="Sony-Ericsson/K800i" />
+          <requirement name="Identifier" value="Sony-Ericsson/K810i" />
+          <requirement name="Identifier" value="Sony-Ericsson/K850" />
+          <requirement name="Identifier" value="Sony-Ericsson/M600" />
+          <requirement name="Identifier" value="Sony-Ericsson/P1i" />
+          <requirement name="Identifier" value="Sony-Ericsson/W200" />
+          <requirement name="Identifier" value="Sony-Ericsson/W350" />
+          <requirement name="Identifier" value="Sony-Ericsson/W550" />
+          <requirement name="Identifier" value="Sony-Ericsson/W580i" />
+          <requirement name="Identifier" value="Sony-Ericsson/W600" />
+          <requirement name="Identifier" value="Sony-Ericsson/W610i" />
+          <requirement name="Identifier" value="Sony-Ericsson/W700" />
+          <requirement name="Identifier" value="Sony-Ericsson/W715" />
+          <requirement name="Identifier" value="Sony-Ericsson/W760" />
+          <requirement name="Identifier" value="Sony-Ericsson/W810" />
+          <requirement name="Identifier" value="Sony-Ericsson/W850" />
+          <requirement name="Identifier" value="Sony-Ericsson/W910" />
+          <requirement name="Identifier" value="Sony-Ericsson/W960" />
+          <requirement name="Identifier" value="WellcoM/W3319" />
+        -->
+        </or>
+        <!--
+        <not> 
+          <or>
+            <requirement name="Vendor" value="BlackBerry" />
+          </or>
+        </not> 
+        -->
+          <!--
+        <or>
+          <requirement name="JavaConfiguration" value="CLDC/1.0" />
+          <requirement name="JavaConfiguration" value="CLDC/1.1+" />
+        </or>
+        <or>
+          <requirement name="JavaPlatform" value="MIDP/1.0" />
+          <requirement name="JavaPlatform" value="MIDP/2.0" />
+          <requirement name="JavaPlatform" value="MIDP/2.1" />
+        </or>
+          -->
+      </deviceRequirements>
+      <build imageLoadStrategy="background"
+             devices="${devicedb}/devices.xml"
+             groups="${devicedb}/groups.xml"
+             vendors="${devicedb}/vendors.xml"
+             apis="${devicedb}/apis.xml"
+             fullscreen="menu"
+             usePolishGui="${project.polish}"
+             obfuscate="no"
+             javacTarget="1.5"
+						 sourceDir="../core/src;${src}"
+             resDir="${res}">
+        <compiler>
+          <!--compilerarg value="-Xlint:unchecked" /-->
+        </compiler>
+      	<debug showLogOnError="true" verbose="false" level="debug" if="debug">
+      	  <filter pattern="th.co.yellowpages.javame.*" level="debug" />
+    		</debug>
+        <postcompiler name="java5" />
+        <!--
+        <postcompiler name="floater">
+          <parameter name="verbose" value="true" />
+        </postcompiler>
+        -->
+        <midlet class="th.co.yellowpages.javame.YPZXingMIDlet" name="QRCoder" />
+        <obfuscator unless="debug || polish.blackberry" name="ProGuard" />
+        <variables includeAntProperties="true">
+        <!-- <variable name="polish.usePolishGui" value="true"
+                    if="polish.blackberry" /> -->
+          <variable name="polish.FullScreen" value="false"
+                    if="polish.name == N-Gage" />
+          <variable name="project.HyperlinkList" value="true" />
+        </variables>
+        <jad>
+          <attribute name="MIDlet-Screen-Mode" value="Both"
+                     if="polish.vendor == LG" />
+
+          <attribute name="Nokia-MIDlet-Category" value="Application"
+                     if="polish.vendor == Nokia" />
+
+          <attribute name="MicroEdition-Configuration" value="CLDC-1.0"
+                     if="polish.cldc1.0" />
+          <attribute name="MicroEdition-Configuration" value="CLDC-1.1"
+                     if="polish.cldc1.1" />
+
+          <attribute name="MicroEdition-Profile" value="MIDP-1.0"
+                     if="polish.midp1" />
+          <attribute name="MicroEdition-Profile" value="MIDP-2.0"
+                     if="polish.midp2" />
+          <attribute name="MicroEdition-Profile" value="MIDP-2.1"
+                     if="polish.midp3" />
+        	
+          <attribute name="MIDlet-Permissions" 
+          			 value="javax.microedition.media.control.VideoControl.getSnapshot" />
+        </jad>
+      </build>
+    </j2mepolish>
+  </target>
+</project>

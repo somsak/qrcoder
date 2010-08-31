@@ -1,0 +1,19 @@
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/yp_customqr_text_layout"
+  android:orientation="horizontal"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <EditText
+    android:id="@+id/yp_customqr_edittext"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:drawable/editbox_background"
+    android:lines="3"
+    android:typeface="normal"
+    android:visibility="visible"
+    android:scrollbars="horizontal|vertical"
+    android:scrollbarStyle="outsideOverlay"
+    android:inputType="textMultiLine"
+    android:gravity="top" />
+</LinearLayout>
