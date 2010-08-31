@@ -2,7 +2,7 @@
   <property file="../build.properties"/>
 
   <!-- set global properties for this build -->
-  <property name="project.name" value="QRCoder - Strip"/>
+  <property name="project.name" value="QRCoder"/>
   <property name="project.vendor" value="INOX"/>
 
   <property name="polish" value="J2ME-polish"/>
