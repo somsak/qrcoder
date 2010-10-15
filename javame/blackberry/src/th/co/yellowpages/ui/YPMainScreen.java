@@ -2,32 +2,16 @@ package th.co.yellowpages.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
 
 import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
-import javax.microedition.lcdui.Image;
+import javax.microedition.io.HttpConnection;
 import javax.microedition.media.Player;
 
 import th.co.yellowpages.ui.component.CustomButtonField;
-import th.co.yellowpages.zxing.BinaryBitmap;
-import th.co.yellowpages.zxing.DecodeHintType;
-import th.co.yellowpages.zxing.LuminanceSource;
-import th.co.yellowpages.zxing.MultiFormatReader;
-import th.co.yellowpages.zxing.Reader;
-import th.co.yellowpages.zxing.ReaderException;
-import th.co.yellowpages.zxing.Result;
+import th.co.yellowpages.util.YPLog;
 import th.co.yellowpages.zxing.client.rim.ZXingUiApplication;
-import th.co.yellowpages.zxing.client.rim.persistence.AppSettings;
 import th.co.yellowpages.zxing.client.rim.persistence.history.DecodeHistory;
-import th.co.yellowpages.zxing.client.rim.persistence.history.DecodeHistoryItem;
 import th.co.yellowpages.zxing.client.rim.util.Log;
-import th.co.yellowpages.zxing.client.rim.util.ReasonableTimer;
-import th.co.yellowpages.zxing.client.rim.util.URLDecoder;
-import th.co.yellowpages.zxing.common.GlobalHistogramBinarizer;
-import th.co.yellowpages.zxing.qrcode.QRCodeReader;
-import net.rim.blackberry.api.browser.Browser;
-import net.rim.blackberry.api.browser.BrowserSession;
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -85,7 +69,6 @@ public class YPMainScreen extends MainScreen {
 		initializeMainScreen();
 
 		app = (ZXingUiApplication) UiApplication.getUiApplication();
-
 	}
 
 	/**

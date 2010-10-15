@@ -2,6 +2,7 @@ package th.co.yellowpages.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
@@ -10,6 +11,7 @@ import javax.microedition.media.Player;
 import javax.microedition.media.control.VolumeControl;
 
 import th.co.yellowpages.zxing.BinaryBitmap;
+import th.co.yellowpages.zxing.DecodeHintType;
 import th.co.yellowpages.zxing.LuminanceSource;
 import th.co.yellowpages.zxing.MultiFormatReader;
 import th.co.yellowpages.zxing.NotFoundException;
@@ -48,7 +50,7 @@ public class AlbumScreen extends MainScreen {
 	private ThumbnailField thumbs = null;
 	private boolean selectable = true;
 	private ZXingUiApplication app;
-	
+
 	public AlbumScreen() {
 		LabelField title = new LabelField("QRCoder", DrawStyle.ELLIPSIS
 				| USE_ALL_WIDTH);
@@ -166,7 +168,7 @@ public class AlbumScreen extends MainScreen {
 	private class ThumbnailListener implements Listener {
 		public void thumbnailSelected(final Bitmap thumbnail, int index,
 				String filename) {
-			
+
 			FileConnection file = null;
 			InputStream is = null;
 			Image selectedImage = null;
@@ -202,7 +204,11 @@ public class AlbumScreen extends MainScreen {
 				try {
 					decodingTimer = new ReasonableTimer();
 					Log.info("Attempting to decode image...");
-					result = reader.decode(bitmap);
+
+					Hashtable hints = new Hashtable(1);
+					hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
+
+					result = reader.decode(bitmap, hints);
 					decodingTimer.finished();
 				} catch (ReaderException e) {
 					Log.error("Could not decode image: " + e);
@@ -251,9 +257,9 @@ public class AlbumScreen extends MainScreen {
 						DecodeHistory.getInstance().addHistoryItem(
 								decodeHistoryItem);
 					}
-					
+
 					app.pushScreen(new ResultScreen(result, filename));
-					
+
 					invalidate();
 				}
 			}
@@ -263,7 +269,7 @@ public class AlbumScreen extends MainScreen {
 		public void selectionCanceled() {
 
 		}
-		
+
 	}
 
 	private void setupListener(ThumbnailField thumbs, boolean selectable) {

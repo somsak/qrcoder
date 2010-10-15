@@ -2,6 +2,7 @@ package th.co.yellowpages.ui;
 
 import java.io.*;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.microedition.io.*;
 import javax.microedition.io.file.*;
@@ -9,6 +10,7 @@ import javax.microedition.io.file.*;
 import th.co.yellowpages.javame.PNGEncoder;
 import th.co.yellowpages.ui.component.*;
 import th.co.yellowpages.zxing.BarcodeFormat;
+import th.co.yellowpages.zxing.DecodeHintType;
 import th.co.yellowpages.zxing.MultiFormatWriter;
 import th.co.yellowpages.zxing.Result;
 import th.co.yellowpages.zxing.WriterException;
@@ -16,6 +18,7 @@ import th.co.yellowpages.zxing.client.result.ParsedResult;
 import th.co.yellowpages.zxing.client.result.ParsedResultType;
 import th.co.yellowpages.zxing.client.result.ResultParser;
 import th.co.yellowpages.zxing.common.BitMatrix;
+import th.co.yellowpages.zxing.EncodeHintType;
 
 import net.rim.device.api.system.Application;
 import net.rim.device.api.system.Bitmap;
@@ -249,8 +252,11 @@ public class EncoderScreen extends MainScreen {
 				int qrWidth = target;
 				int qrHeigth = qrWidth;
 
+				Hashtable hints = new Hashtable(1);
+				hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+
 				BitMatrix qrBitMatrix = writer.encode(content,
-						BarcodeFormat.QR_CODE, qrWidth, qrHeigth);
+						BarcodeFormat.QR_CODE, qrWidth, qrHeigth, hints);
 
 				int[] rgb = new int[qrWidth * qrHeigth];
 
@@ -266,20 +272,22 @@ public class EncoderScreen extends MainScreen {
 					return;
 
 				bitmap = Bitmap.createBitmapFromPNG(pngByte, 0, -1);
-				BitmapField bitmapField = new BitmapField(bitmap, FIELD_HCENTER|FOCUSABLE);
+				BitmapField bitmapField = new BitmapField(bitmap, FIELD_HCENTER
+						| FOCUSABLE);
 
 				screen.deleteAll();
-				
-				VerticalFieldManager vfm = new VerticalFieldManager(USE_ALL_WIDTH);
-				
+
+				VerticalFieldManager vfm = new VerticalFieldManager(
+						USE_ALL_WIDTH);
+
 				// add focusable to fix scroll bug.
-				//vfm.add(new LabelField("", FOCUSABLE));
+				// vfm.add(new LabelField("", FOCUSABLE));
 				vfm.add(bitmapField);
 				// add focusable to fix scroll bug.
 				vfm.add(new LabelField("", FOCUSABLE));
-				
+
 				screen.add(vfm);
-				
+
 				addMenuItem(new SaveMenu());
 				addMenuItem(new NewMenu());
 

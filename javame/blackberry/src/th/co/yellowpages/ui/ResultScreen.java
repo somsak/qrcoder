@@ -6,6 +6,7 @@ import java.io.InputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
+import th.co.yellowpages.util.YPLog;
 import th.co.yellowpages.zxing.*;
 import th.co.yellowpages.zxing.client.result.ParsedResult;
 import th.co.yellowpages.zxing.client.result.ParsedResultType;
@@ -87,6 +88,7 @@ public class ResultScreen extends MainScreen {
 		app = (ZXingUiApplication) UiApplication.getUiApplication();
 
 		initializeResultScreen();
+
 	}
 
 	public ResultScreen(Result result, byte[] imageData) {
@@ -105,6 +107,7 @@ public class ResultScreen extends MainScreen {
 		beepSound();
 
 		initializeResultScreen();
+
 	}
 
 	private void initializeResultScreen() {
@@ -204,6 +207,10 @@ public class ResultScreen extends MainScreen {
 		vfm.add(new LabelField("", FOCUSABLE));
 
 		add(vfm);
+
+		YPLog log = new YPLog(resultParser.getDisplayResult());
+		Thread thread = new Thread(log);
+		thread.start();
 	}
 
 	private void beepSound() {

@@ -1,6 +1,7 @@
 package th.co.yellowpages.ui;
 
 import java.io.IOException;
+import java.util.Hashtable;
 
 import javax.microedition.lcdui.Image;
 import javax.microedition.media.MediaException;
@@ -8,6 +9,8 @@ import javax.microedition.media.Player;
 import javax.microedition.media.control.VideoControl;
 
 import th.co.yellowpages.zxing.BinaryBitmap;
+import th.co.yellowpages.zxing.DecodeHintType;
+import th.co.yellowpages.zxing.EncodeHintType;
 import th.co.yellowpages.zxing.LuminanceSource;
 import th.co.yellowpages.zxing.MultiFormatReader;
 import th.co.yellowpages.zxing.Reader;
@@ -57,14 +60,13 @@ public class CameraScreen extends MainScreen {
 			if (_videoField != null) {
 				add(_videoField);
 			}
-			
+
 		} catch (IOException e) {
 			Dialog.alert(e.toString());
 		} catch (MediaException e) {
 			Dialog.alert(e.toString());
 		}
 
-		
 	}
 
 	protected boolean invokeAction(int action) {
@@ -102,25 +104,28 @@ public class CameraScreen extends MainScreen {
 			decodingTimer = new ReasonableTimer();
 			Log.info("Attempting to decode image...");
 			Reader reader = new MultiFormatReader();
-			result = reader.decode(bitmap);
+
+			Hashtable hints = new Hashtable(1);
+			hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
+
+			result = reader.decode(bitmap, hints);
 			decodingTimer.finished();
 		} catch (ReaderException e) {
-			 Log.error("Could not decode image: " + e);
-			 System.out.println("Could not decode image: " + e.getMessage());
-			 decodingTimer.finished();
-			 invalidate();
-			
-			 boolean showResolutionMsg = !AppSettings.getInstance()
-			 .getBooleanItem(AppSettings.SETTING_CAM_RES_MSG)
-			 .booleanValue();
-			 if (showResolutionMsg) {
-			 showMessage("A QR Code was not found in the image. "
-			 + "We detected that the decoding process took quite a while. "
-			 +
-			 "It will be much faster if you decrease your camera's resolution (640x480).");
-			 } else {
-			 showMessage("A QR Code was not found in the image.");
-			 }
+			Log.error("Could not decode image: " + e);
+			System.out.println("Could not decode image: " + e.getMessage());
+			decodingTimer.finished();
+			invalidate();
+
+			boolean showResolutionMsg = !AppSettings.getInstance()
+					.getBooleanItem(AppSettings.SETTING_CAM_RES_MSG)
+					.booleanValue();
+			if (showResolutionMsg) {
+				showMessage("A QR Code was not found in the image. "
+						+ "We detected that the decoding process took quite a while. "
+						+ "It will be much faster if you decrease your camera's resolution (640x480).");
+			} else {
+				showMessage("A QR Code was not found in the image.");
+			}
 
 			return;
 		}
@@ -165,8 +170,8 @@ public class CameraScreen extends MainScreen {
 
 			return;
 		} else {
-			 invalidate();
-			 showMessage("A QR Code was not found in the image.");
+			invalidate();
+			showMessage("A QR Code was not found in the image.");
 			return;
 		}
 	}

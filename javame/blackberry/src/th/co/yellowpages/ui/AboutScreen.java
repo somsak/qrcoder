@@ -50,7 +50,7 @@ public class AboutScreen extends MainScreen {
 	private static final String ZXING_ICON = "zxing-icon.png";
 
 	public AboutScreen() {
-		LabelField title = new LabelField("QRCoder v1.0", DrawStyle.ELLIPSIS
+		LabelField title = new LabelField("QRCoder v1.1", DrawStyle.ELLIPSIS
 				| USE_ALL_WIDTH);
 		title.setMargin(5,0,0,5);
 		setTitle(title);
